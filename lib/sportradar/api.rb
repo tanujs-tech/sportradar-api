@@ -47,6 +47,7 @@ require 'sportradar/api/soccer_v3/statistic'
 require 'sportradar/api/soccer_v3/summary'
 require 'sportradar/api/soccer_v3/team'
 require 'sportradar/api/soccer_v3/tournament'
+require 'sportradar/api/soccer_v3/tournaments'
 require 'sportradar/api/soccer_v3/tournament_group'
 require 'sportradar/api/soccer_v3/venue'
 
