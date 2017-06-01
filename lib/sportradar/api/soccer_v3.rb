@@ -30,6 +30,15 @@ module Sportradar
         end
       end
 
+      def tournament_info(tournament_id = 'sr:tournament:7')
+        response = get request_url("tournaments/#{tournament_id}/info")
+        if response.success?
+          Sportradar::Api::SoccerV3::TournamentInfo.new response
+        else
+          response
+        end
+      end
+
       # date =  Date.parse('2016-07-17')
       def daily_schedule(date = Date.today)
         response = get request_url("matches/#{date_path(date)}/schedule")
