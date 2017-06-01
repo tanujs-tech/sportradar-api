@@ -1,0 +1,14 @@
+# inherit_from: .rubocop_todo.yml
+
+AllCops:
+  Exclude:
+    - 'node_modules/**/*'
+    - 'db/schema.rb'
+    - 'db/migrate/**/*'
+  TargetRubyVersion: 2.4.1
+
+Style/Documentation:
+  Enabled: false
+
+Style/ClassAndModuleChildren:
+  Enabled: false

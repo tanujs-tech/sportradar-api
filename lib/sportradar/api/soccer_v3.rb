@@ -1,22 +1,33 @@
 module Sportradar
   module Api
     class SoccerV3 < Request
-      attr_accessor :league, :access_level, :simulation
-      def initialize(league = "na", access_level = "t")
+      attr_accessor :league, :access_level, :simulation, :locale
+      def initialize(league = "na", access_level = "t", locale = :en)
         raise Sportradar::Api::Error::InvalidAccessLevel unless allowed_access_levels.include? access_level
         raise Sportradar::Api::Error::InvalidLeague unless allowed_leagues.include? league
         @league = league
+        @locale = locale
         @access_level = access_level
       end
 
-      def schedule
-        response = get request_url("matches/schedule")
+      # def schedule
+      #   response = get request_url("matches/schedule")
+      #   if response.success?
+      #     Sportradar::Api::SoccerV3::Schedule.new response
+      #   else
+      #     response
+      #   end
+      # end
+
+      def tournaments
+        response = get request_url("tournaments")
+        binding.pry
         if response.success?
           Sportradar::Api::SoccerV3::Schedule.new response
         else
           response
         end
-      end
+      end      
 
       # date =  Date.parse('2016-07-17')
       def daily_schedule(date = Date.today)
@@ -130,20 +141,20 @@ module Sportradar
         if simulation
           "/soccer-sim2/wc/#{path}"
         else
-          "/soccer-#{access_level}#{version}/#{league}/#{path}"
+          "/soccer-#{access_level}#{version}/#{league}/#{locale}/#{path}"
         end
       end
 
       def api_key
         if access_level == 'p'
-          Sportradar::Api.api_key_params("soccer_#{league}", "production")
+          Sportradar::Api.api_key_params("soccerv3_#{league}", "production")
         else
-          Sportradar::Api.api_key_params("soccer_#{league}")
+          Sportradar::Api.api_key_params("soccerv3_#{league}")
         end
       end
 
       def version
-        Sportradar::Api.version("soccer")
+        Sportradar::Api.version("soccerv3")
       end
 
       def allowed_access_levels

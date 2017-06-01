@@ -39,6 +39,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "codeclimate-test-reporter"
   spec.add_development_dependency "minitest-focus"
   spec.add_development_dependency "dotenv"
+  spec.add_development_dependency "rubocop"
 
   spec.add_dependency "httparty", ">= 0.14.0"
   spec.add_dependency "activesupport"
