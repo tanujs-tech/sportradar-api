@@ -7,8 +7,8 @@ module Sportradar
 
       def initialize(data)
         @response = data
-        tournaments = response.fetch('tournaments')&.fetch('tournament')
-        @tournaments = parse_into_array(selector: tournaments, klass: Sportradar::Api::SoccerV3::Tournament) if tournaments
+        tournaments_details = response.fetch('tournaments')&.fetch('tournament')
+        @tournaments = parse_into_array(selector: tournaments_details, klass: Sportradar::Api::SoccerV3::Tournament) if tournaments
       end
     end
   end

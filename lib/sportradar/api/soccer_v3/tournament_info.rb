@@ -20,10 +20,10 @@ module Sportradar
         @season_coverage_info = OpenStruct.new tournament_info['season_coverage_info'] if tournament_info['season_coverage_info']
         @coverage_info = OpenStruct.new tournament_info['coverage_info']
 
-        groups = tournament_info.fetch('groups')&.fetch('group')&.send :[], 0...-1
+        groups_details = tournament_info.fetch('groups')&.fetch('group')&.send :[], 0...-1
         teams = tournament_info.fetch('groups')&.fetch('group')&.last&.fetch('team')
 
-        @groups = OpenStruct.new('groups': parse_into_array(selector: groups, klass: Sportradar::Api::SoccerV3::Group),
+        @groups = OpenStruct.new('groups': parse_into_array(selector: groups_details, klass: Sportradar::Api::SoccerV3::Group),
                                  'teams': parse_into_array(selector: teams, klass: Sportradar::Api::SoccerV3::Team))
       end
     end

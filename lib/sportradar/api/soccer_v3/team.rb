@@ -43,7 +43,8 @@ module Sportradar
                     :is_manager,
                     :home,
                     :away,
-                    :abbreviation
+                    :abbreviation,
+                    :qualifier
 
       def initialize(data)
         @response = data
@@ -86,6 +87,7 @@ module Sportradar
         @players = parse_into_array(selector: data['roster']['player'], klass: Sportradar::Api::SoccerV3::Player) if response['roster'] && response['roster']['player']
         @manager = Sportradar::Api::SoccerV3::Player.new data['manager'] if data['manager']
         @abbreviation = data['abbreviation']
+        @qualifier = data['qualifier']
       end
 
       alias roster players

@@ -18,7 +18,7 @@ module Sportradar
           raise Sportradar::Api::Error::NoData
         end
         return Sportradar::Api::Error.new(response.code, response.message, response) unless response.success?
-        response
+        ActiveSupport::HashWithIndifferentAccess.new(response)
       end
 
       def get_request_info(url)
