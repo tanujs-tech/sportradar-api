@@ -1,6 +1,6 @@
 module Sportradar
   module Api
-    class Soccer::Match < Data
+    class SoccerV3::Match < Data
 
       attr_accessor :id, :status, :scheduled, :scratched, :season_id, :reference_id, :category, :tournament_group, :tournament, :home, :away, :venue, :round, :coverage, :period, :clock, :referee, :facts, :response, :future_game, :winner
 
@@ -12,15 +12,15 @@ module Sportradar
         @scratched = data["scratched"] == "true"
         @season_id = data["season_id"]
         @status = data["status"]
-        @category = Sportradar::Api::Soccer::Category.new data["category"] if data["category"]
+        @category = Sportradar::Api::SoccerV3::Category.new data["category"] if data["category"]
         @coverage = OpenStruct.new data["coverage"]
         @round = OpenStruct.new data["round"]
-        @tournament = Sportradar::Api::Soccer::Tournament.new data["tournament"] if data["tournament"]
-        @tournament_group = Sportradar::Api::Soccer::TournamentGroup.new data["tournament_group"] if data["tournament_group"]
+        @tournament = Sportradar::Api::SoccerV3::Tournament.new data["tournament"] if data["tournament"]
+        @tournament_group = Sportradar::Api::SoccerV3::TournamentGroup.new data["tournament_group"] if data["tournament_group"]
 
-        @away = Sportradar::Api::Soccer::Team.new data["away"] if data["away"]
-        @home = Sportradar::Api::Soccer::Team.new data["home"] if data["home"]
-        @venue = Sportradar::Api::Soccer::Venue.new data["venue"] if data["venue"]
+        @away = Sportradar::Api::SoccerV3::Team.new data["away"] if data["away"]
+        @home = Sportradar::Api::SoccerV3::Team.new data["home"] if data["home"]
+        @venue = Sportradar::Api::SoccerV3::Venue.new data["venue"] if data["venue"]
 
         @future_game = @scheduled > Time.now.utc
         @winner = find_winner if @home && @away && !future_game
@@ -29,7 +29,7 @@ module Sportradar
         @period = data["period"]
         @clock = data["clock"]
         @referee = OpenStruct.new data["referee"] if data["referee"]
-        @facts = data["facts"]["fact"].map {|fact| Sportradar::Api::Soccer::Fact.new  fact } if data["facts"]
+        @facts = data["facts"]["fact"].map {|fact| Sportradar::Api::SoccerV3::Fact.new  fact } if data["facts"]
       end
 
       def find_winner

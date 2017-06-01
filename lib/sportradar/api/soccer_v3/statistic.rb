@@ -1,6 +1,6 @@
 module Sportradar
   module Api
-    class Soccer::Statistic < Data
+    class SoccerV3::Statistic < Data
       attr_accessor :response, :year, :statistics
 
       def initialize(data)

@@ -1,6 +1,6 @@
 module Sportradar
   module Api
-    class Soccer::Venue < Data
+    class SoccerV3::Venue < Data
 
       attr_accessor :id, :name, :country_code, :country, :city, :capacity, :coordinates, :reference_id, :response
 

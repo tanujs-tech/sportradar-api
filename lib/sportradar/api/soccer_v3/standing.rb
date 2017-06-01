@@ -1,11 +1,11 @@
 module Sportradar
   module Api
-    class Soccer::Standing < Data
+    class SoccerV3::Standing < Data
       attr_accessor :response, :categories
 
       def initialize(data)
         @response = data
-        @categories = parse_into_array(selector: response["categories"]["category"], klass: Sportradar::Api::Soccer::Category)  if response["categories"] && response["categories"]["category"]
+        @categories = parse_into_array(selector: response["categories"]["category"], klass: Sportradar::Api::SoccerV3::Category)  if response["categories"] && response["categories"]["category"]
       end
 
     end

@@ -1,13 +1,13 @@
 module Sportradar
   module Api
-    class Soccer::Player < Data
+    class SoccerV3::Player < Data
 
       attr_accessor :id, :first_name, :last_name, :country_code, :country, :reference_id, :full_first_name, :full_last_name, :position, :started, :jersey_number, :tactical_position, :tactical_order, :statistics, :preferred_foot, :birthdate, :height_in, :weight_lb, :height_cm, :weight_kg, :teams, :response, :rank, :total, :statistics, :last_modified
 
       def initialize(data)
         @response = data
-        @teams = parse_into_array(selector: response["team"], klass: Sportradar::Api::Soccer::Team)  if response["team"]
-        @teams = parse_into_array(selector: response["teams"]["team"], klass: Sportradar::Api::Soccer::Team)  if response["teams"] && response["teams"]["team"]
+        @teams = parse_into_array(selector: response["team"], klass: Sportradar::Api::SoccerV3::Team)  if response["team"]
+        @teams = parse_into_array(selector: response["teams"]["team"], klass: Sportradar::Api::SoccerV3::Team)  if response["teams"] && response["teams"]["team"]
         @id = data["id"]
         @first_name = data["first_name"]
         @last_name = data["last_name"]
@@ -32,7 +32,7 @@ module Sportradar
         @weight_kg = data["weight_kg"]
         @rank = data["rank"]
         @total = OpenStruct.new data["total"] if data["total"]
-        @statistics = parse_into_array(selector:response["statistics"]["season"], klass: Sportradar::Api::Soccer::Season)  if response["statistics"] &&  response["statistics"]["season"]
+        @statistics = parse_into_array(selector:response["statistics"]["season"], klass: Sportradar::Api::SoccerV3::Season)  if response["statistics"] &&  response["statistics"]["season"]
 
       end
 

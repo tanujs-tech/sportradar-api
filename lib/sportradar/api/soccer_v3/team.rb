@@ -1,6 +1,6 @@
 module Sportradar
   module Api
-    class Soccer::Team < Data
+    class SoccerV3::Team < Data
       attr_accessor :response, :id, :name, :full_name, :alias, :country_code, :country, :type, :reference_id, :formation, :score, :regular_score, :penalty_score, :winner, :scoring, :statistics, :first_half_score, :second_half_score, :players, :manager, :roster, :jersey_number, :position, :is_player, :is_manager,  :rank, :win, :draw, :loss, :goals_for, :goals_against, :points, :change, :goals_diff, :jersey_number, :position, :is_player, :is_manager, :home, :away
 
 
@@ -41,9 +41,9 @@ module Sportradar
         parse_scoring if scoring
 
         @statistics =  OpenStruct.new data["statistics"] if data["statistics"]
-        @players = parse_into_array(selector: data["players"]["player"], klass: Sportradar::Api::Soccer::Player)  if response['players'] && response['players']['player']
-        @players = parse_into_array(selector: data["roster"]["player"], klass: Sportradar::Api::Soccer::Player)  if response['roster'] && response['roster']['player']
-        @manager =  Sportradar::Api::Soccer::Player.new data["manager"] if data["manager"]
+        @players = parse_into_array(selector: data["players"]["player"], klass: Sportradar::Api::SoccerV3::Player)  if response['players'] && response['players']['player']
+        @players = parse_into_array(selector: data["roster"]["player"], klass: Sportradar::Api::SoccerV3::Player)  if response['roster'] && response['roster']['player']
+        @manager =  Sportradar::Api::SoccerV3::Player.new data["manager"] if data["manager"]
       end
 
       alias_method :roster, :players
