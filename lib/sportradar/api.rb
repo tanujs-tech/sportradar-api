@@ -122,6 +122,7 @@ module Sportradar
         {api: :live_images, version:  1},
         {api: :olympics, version:   2},
         {api: :soccer, version:   2},
+        {api: :soccerv3, version:   3},
         {api: :ncaawb, version:   3},
         {api: :mma, version:  1},
         {api: :cricket, version:    1},
