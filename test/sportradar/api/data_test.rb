@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class DummyData < Sportradar::Api::Data
@@ -12,7 +14,6 @@ class DummyData < Sportradar::Api::Data
 end
 
 class Sportradar::Api::ContentTest < Minitest::Test
-
   def test_it_has_set_attributes
     a = DummyData.new(test: true)
     assert a.attributes.count, 1
@@ -27,17 +28,16 @@ class Sportradar::Api::ContentTest < Minitest::Test
   end
 
   def test_it_converts_a_hash_or_array
-    data_hash = DummyData.new(test: true, hash_array: {"cool" => "test"})
+    data_hash = DummyData.new(test: true, hash_array: { 'cool' => 'test' })
     assert_kind_of Array, data_hash.hash_array
-    data_array = DummyData.new(test: true, hash_array: [{"cool" => "test"}])
+    data_array = DummyData.new(test: true, hash_array: [{ 'cool' => 'test' }])
     assert_kind_of Array, data_array.hash_array
   end
 
   def test_it_parses_an_array_of_hashes_into_a_hash
-    data_hash = DummyData.new(test: true, parsed_hash: {"cool" => "test"})
+    data_hash = DummyData.new(test: true, parsed_hash: { 'cool' => 'test' })
     assert_kind_of Hash, data_hash.parsed_hash
-    data_array = DummyData.new(test: true, parsed_hash: [{"cool" => "test"}])
+    data_array = DummyData.new(test: true, parsed_hash: [{ 'cool' => 'test' }])
     assert_kind_of Hash, data_array.parsed_hash
   end
-
 end

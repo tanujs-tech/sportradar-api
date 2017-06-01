@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Sportradar
   module Api
     module Basketball
@@ -23,7 +25,7 @@ module Sportradar
             @api      = opts[:api]
             # @game     = opts[:game]
 
-            @id       = response["id"]
+            @id       = response['id']
             @number   = response['number']
             @sequence = response['sequence']
 
@@ -31,17 +33,17 @@ module Sportradar
 
             update(data)
           end
-          def update(data, **opts)
+
+          def update(data, **_opts)
             create_data(@plays_hash, data.dig('events'), klass: Play, api: @api, half: self)
           end
 
           def plays
             @plays_hash.values
           end
-          alias :events :plays
+          alias events plays
 
           private
-
         end
       end
     end

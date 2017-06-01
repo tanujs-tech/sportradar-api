@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Sportradar
   module Api
     class Nfl::Summary < Data
@@ -5,13 +7,12 @@ module Sportradar
 
       def initialize(data)
         @response = data
-        @season = Sportradar::Api::Nfl::Season.new data["season"] if data["season"]
-        @week = Sportradar::Api::Nfl::Week.new data["week"] if data["week"]
-        @venue = Sportradar::Api::Nfl::Venue.new data["venue"] if data["venue"]
-        @home = Sportradar::Api::Nfl::Team.new data["home"] if data["home"]
-        @away = Sportradar::Api::Nfl::Team.new data["away"] if data["away"]
+        @season = Sportradar::Api::Nfl::Season.new data['season'] if data['season']
+        @week = Sportradar::Api::Nfl::Week.new data['week'] if data['week']
+        @venue = Sportradar::Api::Nfl::Venue.new data['venue'] if data['venue']
+        @home = Sportradar::Api::Nfl::Team.new data['home'] if data['home']
+        @away = Sportradar::Api::Nfl::Team.new data['away'] if data['away']
       end
-
     end
   end
 end

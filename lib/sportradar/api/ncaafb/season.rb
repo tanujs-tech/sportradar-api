@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Sportradar
   module Api
     class Ncaafb
@@ -20,7 +22,7 @@ module Sportradar
         # private
 
         def weeks(number = nil)
-          @weeks_hash ||= parse_into_array_with_options(selector: response["week"], klass: Sportradar::Api::Ncaafb::Week, api: @api, season: self).map { |w| [w.sequence.to_i, w] }.to_h
+          @weeks_hash ||= parse_into_array_with_options(selector: response['week'], klass: Sportradar::Api::Ncaafb::Week, api: @api, season: self).map { |w| [w.sequence.to_i, w] }.to_h
           number ? @weeks_hash[number.to_i] : @weeks_hash.values
         end
 
@@ -53,7 +55,6 @@ module Sportradar
         # def set_teams
         #   @teams = @divisions.flat_map(&:teams) if divisions&.all? {|division| division.teams }
         # end
-
       end
     end
   end

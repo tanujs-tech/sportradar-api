@@ -1,10 +1,11 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class Sportradar::Api::Basketball::Ncaamb::GamePbpTest < Minitest::Test
-
   def setup
     # ESPN boxscore: http://www.espn.com/mens-college-basketball/boxscore?gameId=400915635
-    game_id = "29111b80-992d-4e32-a88d-220fb4bd3121"
+    game_id = '29111b80-992d-4e32-a88d-220fb4bd3121'
     @game = Sportradar::Api::Basketball::Ncaamb::Game.new('id' => game_id)
     VCR.use_cassette("ncaamb/#{@game.api.content_format}/game/pbp_regulation") do
       @game.get_pbp
@@ -71,5 +72,4 @@ class Sportradar::Api::Basketball::Ncaamb::GamePbpTest < Minitest::Test
     assert_equal 0, @game.plays_by_type('shot_miss').map(&:points).inject(:+)
     assert_equal 181, @game.plays_by_type('shot_made').map(&:points).inject(:+)
   end
-
 end

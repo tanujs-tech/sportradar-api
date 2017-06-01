@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Sportradar
   module Api
     module Baseball
@@ -43,9 +45,10 @@ module Sportradar
             # opts[:game].update_from_team(id, "current_pitcher"=>{"last_name"=>"Dull", "first_name"=>"Ryan", "preferred_name"=>"Ryan", "jersey_number"=>"66"})
             # add_game(opts[:game])
             # opts[:game].update_score(id => @runs)             if @runs
-            opts[:game].update_stats(self, data['statistics'])  if data['statistics']
+            opts[:game].update_stats(self, data['statistics']) if data['statistics']
           end
         end
+
         def handle_names(data)
           # need to do some more work here
           @name = data['name'] if data['name']
@@ -64,6 +67,7 @@ module Sportradar
         def games
           @games_hash.values
         end
+
         def add_game(game)
           @games_hash[game.id] = game.id if game
         end
@@ -72,17 +76,18 @@ module Sportradar
           get_roster if @players_hash.empty?
           @players_hash.values
         end
-        alias :roster :players
-
+        alias roster players
 
         # parsing response data
 
         def parse_players(data, game)
           create_data(@players_hash, data, klass: Player, api: api, team: self, game: game)
         end
+
         def update_player_stats(player, stats, game = nil)
           game ? game.update_player_stats(player, stats) : @player_stats.merge!(player.id => stats.merge!(player: player))
         end
+
         def parse_records(data)
           @records['overall'] = Record.new(data, type: 'overall')
         end
@@ -95,52 +100,57 @@ module Sportradar
           data
         end
 
-
         # data retrieval
 
         def get_roster
           data = api.get_data(path_roster)
           ingest_roster(data)
         end
+
         def ingest_roster(data)
           update(data)
           data
         end
+
         def queue_roster
           url, headers, options, timeout = api.get_request_info(path_roster)
-          {url: url, headers: headers, params: options, timeout: timeout, callback: method(:ingest_roster)}
+          { url: url, headers: headers, params: options, timeout: timeout, callback: method(:ingest_roster) }
         end
 
         def get_season_stats(year = Date.today.year)
           data = api.get_data(path_season_stats(year))
           ingest_season_stats(data)
         end
+
         def ingest_season_stats(data)
           parse_season_stats(data)
         end
+
         def queue_season_stats
           url, headers, options, timeout = api.get_request_info(path_season_stats)
-          {url: url, headers: headers, params: options, timeout: timeout, callback: method(:ingest_season_stats)}
+          { url: url, headers: headers, params: options, timeout: timeout, callback: method(:ingest_season_stats) }
         end
 
         # url path helpers
         def path_base
-          "teams/#{ id }"
+          "teams/#{id}"
         end
+
         def path_base_stats(season_year = api.default_year, default_season = api.default_season)
           "seasontd/#{season_year}/#{default_season}/teams/#{id}"
         end
+
         def path_roster
-          "#{ path_base }/profile"
+          "#{path_base}/profile"
         end
+
         def path_season_stats(year)
-          "#{ path_base_stats(year) }/statistics"
+          "#{path_base_stats(year)}/statistics"
         end
 
         def api
           @api || Sportradar::Api::Baseball::Mlb.new
         end
-
       end
     end
   end

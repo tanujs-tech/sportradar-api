@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Sportradar
   module Api
     class Ncaafb
@@ -10,12 +12,12 @@ module Sportradar
           @api      = opts[:api]
           @week     = opts[:week]
 
-          @id            = response["id"]
-          @year          = response['year'] || @week&.season.year
-          @type          = response['type'] || @week&.season.type
+          @id            = response['id']
+          @year          = response['year'] || @week&.season&.year
+          @type          = response['type'] || @week&.season&.type
           @week_number   = response['week'] || @week&.sequence
           @coverage      = response['coverage']
-          @scheduled     = Time.parse(response["scheduled"]) if response["scheduled"]
+          @scheduled     = Time.parse(response['scheduled']) if response['scheduled']
           @home          = Team.new(response['home'], api: api, game: self)
           @away          = Team.new(response['away'], api: api, game: self)
           @status        = response['status']
@@ -65,11 +67,10 @@ module Sportradar
           id ? @teams_hash[id.to_i] : @teams_hash.values
         end
 
-
         def update(data)
           @attendance     = data['attendance']                          if data['attendance']
           @summary        = data['summary']                             if data['summary']
-          @scheduled      = Time.parse(data["scheduled"])               if data["scheduled"]
+          @scheduled      = Time.parse(data['scheduled'])               if data['scheduled']
           home.update(data['home'])                   if data['home']
           away.update(data['away'])                   if data['away']
           @status         = data['status']                              if data['status']
@@ -90,22 +91,27 @@ module Sportradar
         # end
 
         def path_base
-          "#{ year }/#{ type }/#{ week_number }/#{ away }/#{ home }"
+          "#{year}/#{type}/#{week_number}/#{away}/#{home}"
         end
+
         def path_box
-          links['boxscore'] || "#{ path_base }/boxscore"
+          links['boxscore'] || "#{path_base}/boxscore"
         end
+
         def path_extended_box
-          "#{ path_base }/extended-boxscore"
+          "#{path_base}/extended-boxscore"
         end
+
         def path_pbp
-          links['pbp'] || "#{ path_base }/pbp"
+          links['pbp'] || "#{path_base}/pbp"
         end
+
         def path_roster
-          links['roster'] || "#{ path_base }/roster"
+          links['roster'] || "#{path_base}/roster"
         end
+
         def path_summary
-          links['summary'] || "#{ path_base }/summary"
+          links['summary'] || "#{path_base}/summary"
         end
 
         def get_boxscore
@@ -113,11 +119,13 @@ module Sportradar
           update(data)
           self
         end
+
         def get_pbp
           data = api.get_data(path_pbp)['game']
           update(data)
           @pbp = set_pbp(data['quarter'])
         end
+
         def get_roster
           data = api.get_data(path_roster)['game']
           update_data(@teams_hash, data['team'])
@@ -142,8 +150,7 @@ module Sportradar
         #     end
         #   end
         # end
-        KEYS_SCHEDULE = ["id", "scheduled", "coverage", "home_rotation", "away_rotation", "home", "away", "status", "neutral_site", "home_points", "away_points", "venue", "weather", "broadcast", "links"]
-
+        KEYS_SCHEDULE = %w[id scheduled coverage home_rotation away_rotation home away status neutral_site home_points away_points venue weather broadcast links].freeze
       end
     end
   end

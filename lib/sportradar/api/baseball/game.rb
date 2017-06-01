@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Sportradar
   module Api
     module Baseball
@@ -6,7 +8,7 @@ module Sportradar
 
         attr_reader :inning, :half, :outs, :bases, :pitchers, :final, :rescheduled, :inning_over
         attr_reader :outcome, :count
-        DEFAULT_BASES = { '1' => nil, '2' => nil, '3' => nil }
+        DEFAULT_BASES = { '1' => nil, '2' => nil, '3' => nil }.freeze
 
         def initialize(data, **opts)
           @response = data
@@ -35,6 +37,7 @@ module Sportradar
 
           update(data, **opts)
         end
+
         def lineup
           @lineup ||= Lineup.new({}, game: self)
         end
@@ -46,21 +49,26 @@ module Sportradar
         def tied?
           @score[away_id].to_i == @score[home_id].to_i
         end
+
         # def runs(team_id)
         #   summary_stat(team_id, 'runs')
         # end
         def hits(team_id)
           @scoring_raw.hits(team_id)
         end
+
         def errors(team_id)
           @scoring_raw.errors(team_id)
         end
+
         def runs(team_id)
           team_id.is_a?(Symbol) ? @score[@team_ids[team_id]] : @score[team_id]
         end
+
         def summary_stat(team_id, stat_name)
           scoring.dig(team_id, stat_name)
         end
+
         def stats(team_id)
           team_id.is_a?(Symbol) ? @team_stats[@team_ids[team_id]].to_i : @team_stats[team_id].to_i
         end
@@ -68,12 +76,15 @@ module Sportradar
         def scoring
           @scoring_raw.scores
         end
+
         def update_score(score)
           @score.merge!(score)
         end
+
         def update_stats(team, stats)
           @team_stats.merge!(team.id => stats.merge!(team: team))
         end
+
         def update_player_stats(player, stats)
           @player_stats.merge!(player.id => stats.merge!(player: player))
         end
@@ -82,9 +93,9 @@ module Sportradar
           home_id = data.dig('home', 'id')
           away_id = data.dig('away', 'id')
           rhe = {
-            'runs'    => { home_id => data.dig('home', 'runs'), away_id => data.dig('away', 'runs')},
-            'hits'    => { home_id => data.dig('home', 'hits'), away_id => data.dig('away', 'hits')},
-            'errors'  => { home_id => data.dig('home', 'errors'), away_id => data.dig('away', 'errors')},
+            'runs'    => { home_id => data.dig('home', 'runs'), away_id => data.dig('away', 'runs') },
+            'hits'    => { home_id => data.dig('home', 'hits'), away_id => data.dig('away', 'hits') },
+            'errors'  => { home_id => data.dig('home', 'errors'), away_id => data.dig('away', 'errors') }
           }
           @scoring_raw.update(rhe, source: :rhe)
           update_score(home_id => data.dig('home', 'runs'))
@@ -93,16 +104,16 @@ module Sportradar
 
         def parse_pitchers(data)
           pitchers = {
-            'starting'  => { home_id => data.dig('home', 'starting_pitcher'), away_id => data.dig('away', 'starting_pitcher')},
-            'probable'  => { home_id => data.dig('home', 'probable_pitcher'), away_id => data.dig('away', 'probable_pitcher')},
-            'current'   => { home_id => data.dig('home', 'current_pitcher'),  away_id => data.dig('away', 'current_pitcher')},
+            'starting'  => { home_id => data.dig('home', 'starting_pitcher'), away_id => data.dig('away', 'starting_pitcher') },
+            'probable'  => { home_id => data.dig('home', 'probable_pitcher'), away_id => data.dig('away', 'probable_pitcher') },
+            'current'   => { home_id => data.dig('home', 'current_pitcher'),  away_id => data.dig('away', 'current_pitcher') }
           }
-          @pitchers.merge!(pitchers) do |key, current_val, merge_val|
-            current_val.merge(merge_val) { |k, cur, mer| (mer || cur) }
+          @pitchers.merge!(pitchers) do |_key, current_val, merge_val|
+            current_val.merge(merge_val) { |_k, cur, mer| (mer || cur) }
           end
         end
 
-        def update(data, source: nil, **opts)
+        def update(data, source: nil, **_opts)
           # via pbp
           @title        = data['title']                 if data['title']
           @status       = data['status']                if data['status']
@@ -114,7 +125,7 @@ module Sportradar
           # @home_runs    = data['home_runs'].to_i      if data['home_runs']
           # @away_runs    = data['away_runs'].to_i      if data['away_runs']
 
-          @scheduled    = Time.parse(data["scheduled"]) if data["scheduled"]
+          @scheduled    = Time.parse(data['scheduled']) if data['scheduled']
           @venue        = Venue.new(data['venue']) if data['venue']
           @broadcast    = Broadcast.new(data['broadcast']) if data['broadcast']
           @home         = Team.new(data['home'], api: api, game: self) if data['home']
@@ -126,7 +137,7 @@ module Sportradar
           @final        = data['final']                 if data['final']
           @rescheduled  = data['rescheduled']           if data['rescheduled']
 
-          @team_ids     = { home: @home_id, away: @away_id}
+          @team_ids     = { home: @home_id, away: @away_id }
 
           update_bases(data)
           parse_pitchers(data) if data['home'] && data['away']
@@ -154,18 +165,19 @@ module Sportradar
             return
           end
           @bases = if data.respond_to?(:runners)
-            hash = Array(data.runners).map { |runner| [runner.ending_base.to_s, runner.id] if !runner.out }.compact.to_h
-            DEFAULT_BASES.merge(hash)
-          elsif (runners = data.dig('outcome', 'runners'))
-            hash = runners.map { |runner| [runner['ending_base'].to_s, runner['id']] if !runner['out'] }.compact.to_h
-            DEFAULT_BASES.merge(hash)
-          else # probably new inning, no runners
-            DEFAULT_BASES.dup
+                     hash = Array(data.runners).map { |runner| [runner.ending_base.to_s, runner.id] unless runner.out }.compact.to_h
+                     DEFAULT_BASES.merge(hash)
+                   elsif (runners = data.dig('outcome', 'runners'))
+                     hash = runners.map { |runner| [runner['ending_base'].to_s, runner['id']] unless runner['out'] }.compact.to_h
+                     DEFAULT_BASES.merge(hash)
+                   else # probably new inning, no runners
+                     DEFAULT_BASES.dup
           end
         rescue => e
           puts data.inspect
           raise e
         end
+
         def advance_inning
           @inning_over = false
           return unless count['outs'] == 3
@@ -179,29 +191,30 @@ module Sportradar
           @inning_over = true
           @bases = DEFAULT_BASES.dup
           half, inn = if count['inning_half'] == 'B'
-            ['T', count['inning'] += 1]
-          elsif count['inning_half'] == 'T'
-            ['B', count['inning']]
-          else
-            [nil, 1]
+                        ['T', count['inning'] += 1]
+                      elsif count['inning_half'] == 'T'
+                        ['B', count['inning']]
+                      else
+                        [nil, 1]
           end
           @count = {
             'balls'       => 0,
             'strikes'     => 0,
             'outs'        => 0,
             'inning'      => inn,
-            'inning_half' => half,
+            'inning_half' => half
           }
         end
 
-        def extract_count(data) # extract from pbp
+        def extract_count(_data) # extract from pbp
           recent_pitches = pitches.last(10)
           last_pitch = recent_pitches.reverse_each.detect(&:count)
           return unless last_pitch
           update_bases(last_pitch)
           @count.merge!(last_pitch.count)
           hi = last_pitch.at_bat.event.half_inning
-          @count.merge!('inning' => hi.number.to_i, 'inning_half' => hi.half)
+          @count['inning'] = hi.number.to_i
+          @count['inning_half'] = hi.half
           advance_inning
         end
 
@@ -241,9 +254,7 @@ module Sportradar
         end
 
         def pbp
-          if !future? && innings.empty?
-            get_pbp
-          end
+          get_pbp if !future? && innings.empty?
           @pbp ||= innings
         end
 
@@ -266,6 +277,7 @@ module Sportradar
         def innings
           @innings_hash.values
         end
+
         def half_innings
           innings.flat_map(&:half_innings)
         end
@@ -298,7 +310,7 @@ module Sportradar
         end
 
         def cancelled?
-          ['unnecessary', 'postponed'].include? status
+          %w[unnecessary postponed].include? status
         end
 
         def future?
@@ -306,11 +318,11 @@ module Sportradar
         end
 
         def started?
-          ['inprogress', 'wdelay', 'delayed'].include? status
+          %w[inprogress wdelay delayed].include? status
         end
 
         def finished?
-          ['complete', 'closed'].include? status
+          %w[complete closed].include? status
         end
 
         def completed?
@@ -323,19 +335,19 @@ module Sportradar
 
         # url path helpers
         def path_base
-          "games/#{ id }"
+          "games/#{id}"
         end
 
         def path_box
-          "#{ path_base }/boxscore"
+          "#{path_base}/boxscore"
         end
 
         def path_pbp
-          "#{ path_base }/pbp"
+          "#{path_base}/pbp"
         end
 
         def path_summary
-          "#{ path_base }/summary"
+          "#{path_base}/summary"
         end
 
         # data retrieval
@@ -354,11 +366,11 @@ module Sportradar
 
         def queue_pbp
           url, headers, options, timeout = api.get_request_info(path_pbp)
-          {url: url, headers: headers, params: options, timeout: timeout, callback: method(:ingest_pbp)}
+          { url: url, headers: headers, params: options, timeout: timeout, callback: method(:ingest_pbp) }
         end
 
         def get_pbp
-          data = api.get_data(path_pbp);
+          data = api.get_data(path_pbp)
           ingest_pbp(data)
         end
 
@@ -373,8 +385,8 @@ module Sportradar
           check_newness(:score, @score)
           @pbp = @innings_hash.values
           data
-        # rescue => e
-        #   binding.pry
+          # rescue => e
+          #   binding.pry
         end
 
         def get_summary
@@ -384,7 +396,7 @@ module Sportradar
 
         def queue_summary
           url, headers, options, timeout = api.get_request_info(path_summary)
-          {url: url, headers: headers, params: options, timeout: timeout, callback: method(:ingest_summary)}
+          { url: url, headers: headers, params: options, timeout: timeout, callback: method(:ingest_summary) }
         end
 
         def ingest_summary(data)

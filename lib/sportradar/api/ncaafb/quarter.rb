@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Sportradar
   module Api
     class Ncaafb
@@ -9,7 +11,7 @@ module Sportradar
           @api      = opts[:api]
           @game     = opts[:game]
 
-          @id       = response["id"]
+          @id       = response['id']
           @number   = response['number']
           @event    = response['event']
 
@@ -25,12 +27,12 @@ module Sportradar
         def drives
           @drives ||= parse_into_array_with_options(selector: response['drive'], klass: Sportradar::Api::Ncaafb::Drive, api: @api, quarter: self)
         end
+
         def plays
           @plays ||= drives.flat_map(&:plays)
         end
 
         private
-
       end
     end
   end

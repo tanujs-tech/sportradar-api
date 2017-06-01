@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Sportradar
   module Api
     module Basketball
@@ -20,8 +22,8 @@ module Sportradar
           end
         end
 
-        def daily_schedule(date = default_date, nba_season = default_season)
-          response = get request_url("games/#{ date.year }/#{ date.month }/#{ date.day }/schedule")
+        def daily_schedule(date = default_date, _nba_season = default_season)
+          response = get request_url("games/#{date.year}/#{date.month}/#{date.day}/schedule")
           if response.success?
             Sportradar::Api::Basketball::Nba::Schedule.new(response.to_h, api: self)
           else
@@ -39,14 +41,14 @@ module Sportradar
         end
 
         def league_hierarchy
-          response = get request_url("league/hierarchy")
+          response = get request_url('league/hierarchy')
           if response.success?
             Sportradar::Api::Basketball::Nba::Hierarchy.new(response.to_h, api: self)
           else
             response
           end
         end
-        alias :hierarchy :league_hierarchy
+        alias hierarchy league_hierarchy
 
         def standings(season_year = default_year, nba_season = default_season)
           response = get request_url("seasontd/#{season_year}/#{nba_season}/standings")
@@ -64,12 +66,15 @@ module Sportradar
         def default_year
           2016
         end
+
         def default_date
           Date.today
         end
+
         def default_season
           'reg'
         end
+
         def default_access_level
           if (ENV['SPORTRADAR_ENV'] || ENV['RACK_ENV'] || ENV['RAILS_ENV']) == 'production'
             'p'
@@ -114,9 +119,8 @@ module Sportradar
         end
 
         def allowed_seasons
-          ["pre", "reg", "pst"]
+          %w[pre reg pst]
         end
-
       end
     end
   end

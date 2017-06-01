@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Sportradar
   module Api
     class Football::StatPack::ExtraPoints < Football::StatPack
@@ -5,20 +7,19 @@ module Sportradar
 
       def set_stats
         kick_data = response['kicks'] || response
-        @attempts = kick_data["attempts"]
-        @made     = kick_data["made"]
-        @blocked  = kick_data["blocked"]
+        @attempts = kick_data['attempts']
+        @made     = kick_data['made']
+        @blocked  = kick_data['blocked']
         if response['conversions']
-          @pass_attempts      = response["pass_attempts"]
-          @pass_successes     = response["pass_successes"]
-          @rush_attempts      = response["rush_attempts"]
-          @rush_successes     = response["rush_successes"]
-          @defense_attempts   = response["defense_attempts"]
-          @defense_successes  = response["defense_successes"]
-          @turnover_successes = response["turnover_successes"]
+          @pass_attempts      = response['pass_attempts']
+          @pass_successes     = response['pass_successes']
+          @rush_attempts      = response['rush_attempts']
+          @rush_successes     = response['rush_successes']
+          @defense_attempts   = response['defense_attempts']
+          @defense_successes  = response['defense_successes']
+          @turnover_successes = response['turnover_successes']
         end
       end
-
     end
   end
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Sportradar
   module Api
     module Baseball
@@ -5,7 +7,7 @@ module Sportradar
         class Hierarchy < Data
           attr_accessor :response, :id, :name, :alias, :year, :type
           def all_attributes
-            [:name, :alias, :leagues, :divisions, :teams]
+            %i[name alias leagues divisions teams]
           end
 
           def initialize(data = {}, **opts)
@@ -16,10 +18,9 @@ module Sportradar
             @leagues_hash = {}
             @games_hash = {}
             @teams_hash = {}
-
           end
 
-          def update(data, source: nil, **opts)
+          def update(data, source: nil, **_opts)
             # update stuff
             @name     = data.dig('league', 'name')  if data.dig('league', 'name')
             @alias    = data.dig('league', 'alias') if data.dig('league', 'alias')
@@ -33,7 +34,7 @@ module Sportradar
               if data['games'].first.keys == ['game']
                 data['games'].map! { |hash| hash['game'] }
               end
-              @games_hash = create_data({}, data['games'],   klass: Game,   hierarchy: self, api: api)
+              @games_hash = create_data({}, data['games'], klass: Game, hierarchy: self, api: api)
             end
           end
 
@@ -63,9 +64,11 @@ module Sportradar
           def leagues
             @leagues_hash.values
           end
+
           def divisions
             leagues.flat_map(&:divisions)
           end
+
           def teams
             teams = divisions.flat_map(&:teams)
             if teams.empty?
@@ -79,13 +82,11 @@ module Sportradar
               teams
             end
           end
+
           def team(team_id)
             teams.detect { |team| team.id == team_id }
-          end
+          end # api stuff
 
-
-
-          # api stuff
           def api
             @api || Sportradar::Api::Baseball::Mlb.new
           end
@@ -93,49 +94,59 @@ module Sportradar
           def default_year
             Date.today.year
           end
+
           def default_date
             Date.today
           end
+
           def default_season
             'reg'
           end
+
           def season_year
             @year || default_year
           end
+
           def mlb_season
             @type || default_season
           end
 
-
           # url paths
           def path_base
-            "league"
+            'league'
           end
+
           def path_schedule
             "games/#{season_year}/#{mlb_season}/schedule"
           end
+
           def path_series
             "series/#{season_year}/#{mlb_season}/schedule"
           end
+
           def path_rankings
             "seasontd/#{season_year}/#{mlb_season}/rankings"
           end
+
           def path_hierarchy
-            "#{ path_base }/hierarchy"
+            "#{path_base}/hierarchy"
           end
+
           def path_depth_charts
-            "#{ path_base }/depth_charts"
+            "#{path_base}/depth_charts"
           end
+
           def path_standings
             "seasontd/#{season_year}/#{mlb_season}/standings"
           end
+
           def path_daily_summary(date)
             "games/#{date.year}/#{date.month}/#{date.day}/summary"
           end
-          def path_daily_boxscore(date)
-            "#{ path_base }/games/#{date.year}/#{date.month}/#{date.day}/boxscore"
-          end
 
+          def path_daily_boxscore(date)
+            "#{path_base}/games/#{date.year}/#{date.month}/#{date.day}/boxscore"
+          end
 
           # data retrieval
 
@@ -152,7 +163,7 @@ module Sportradar
 
           def queue_schedule
             url, headers, options, timeout = api.get_request_info(path_schedule)
-            {url: url, headers: headers, params: options, timeout: timeout, callback: method(:ingest_schedule)}
+            { url: url, headers: headers, params: options, timeout: timeout, callback: method(:ingest_schedule) }
           end
 
           ## hierarchy
@@ -168,7 +179,7 @@ module Sportradar
 
           def queue_hierarchy
             url, headers, options, timeout = api.get_request_info(path_hierarchy)
-            {url: url, headers: headers, params: options, timeout: timeout, callback: method(:ingest_hierarchy)}
+            { url: url, headers: headers, params: options, timeout: timeout, callback: method(:ingest_hierarchy) }
           end
 
           ## depth_charts
@@ -184,7 +195,7 @@ module Sportradar
 
           def queue_depth_charts
             url, headers, options, timeout = api.get_request_info(path_depth_charts)
-            {url: url, headers: headers, params: options, timeout: timeout, callback: method(:ingest_depth_charts)}
+            { url: url, headers: headers, params: options, timeout: timeout, callback: method(:ingest_depth_charts) }
           end
 
           ## standings
@@ -194,13 +205,13 @@ module Sportradar
           end
 
           def ingest_standings(data)
-            update(data.dig('league','season'), source: :teams)
+            update(data.dig('league', 'season'), source: :teams)
             data
           end
 
           def queue_standings
             url, headers, options, timeout = api.get_request_info(path_standings)
-            {url: url, headers: headers, params: options, timeout: timeout, callback: method(:ingest_standings)}
+            { url: url, headers: headers, params: options, timeout: timeout, callback: method(:ingest_standings) }
           end
 
           ## depth_charts
@@ -216,7 +227,7 @@ module Sportradar
 
           def queue_depth_charts
             url, headers, options, timeout = api.get_request_info(path_depth_charts)
-            {url: url, headers: headers, params: options, timeout: timeout, callback: method(:ingest_depth_charts)}
+            { url: url, headers: headers, params: options, timeout: timeout, callback: method(:ingest_depth_charts) }
           end
 
           ## daily summary
@@ -232,7 +243,7 @@ module Sportradar
 
           def queue_daily_summary(date = Date.today)
             url, headers, options, timeout = api.get_request_info(path_daily_summary(date))
-            {url: url, headers: headers, params: options, timeout: timeout, callback: method(:ingest_daily_summary)}
+            { url: url, headers: headers, params: options, timeout: timeout, callback: method(:ingest_daily_summary) }
           end
 
           ## venues
@@ -250,7 +261,6 @@ module Sportradar
           #   url, headers, options, timeout = api.get_request_info(path_venues)
           #   {url: url, headers: headers, params: options, timeout: timeout, callback: method(:ingest_venues)}
           # end
-
         end
       end
     end

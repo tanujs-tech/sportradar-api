@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Sportradar
   module Api
     module Baseball
@@ -10,15 +12,16 @@ module Sportradar
           @at_bat   = opts[:at_bat]
           # @half_inning   = opts[:half_inning]
 
-          @id       = data["id"]
+          @id       = data['id']
 
           update(data)
         end
+
         def ==(other)
           @id == other.id && @count == other.count && @outcome_id == other.outcome_id
         end
-        def update(data, **opts)
 
+        def update(data, **_opts)
           if data['outcome_id']
             @outcome_id   = data['outcome_id']
             @outcome      = self.class.pitch_outcome(@outcome_id)
@@ -45,15 +48,15 @@ module Sportradar
         end
 
         def foul?
-          ['kF','kFT'].include? @outcome_id
+          %w[kF kFT].include? @outcome_id
         end
 
         def ball?
-          ['bAB', 'bB', 'bDB', 'bIB', 'bPO'].include? @outcome_id
+          %w[bAB bB bDB bIB bPO].include? @outcome_id
         end
 
         def strike?
-          ['aKLAD1', 'aKLAD2', 'aKLAD3', 'aKLAD4', 'aKSAD1', 'aKSAD2', 'aKSAD3', 'aKSAD4', 'kF', 'kFT', 'kKL', 'kKS', 'oKLT1', 'oKLT2', 'oKLT3', 'oKLT4', 'oKST1', 'oKST2', 'oKST3', 'oKST4'].include? @outcome_id
+          %w[aKLAD1 aKLAD2 aKLAD3 aKLAD4 aKSAD1 aKSAD2 aKSAD3 aKSAD4 kF kFT kKL kKS oKLT1 oKLT2 oKLT3 oKLT4 oKST1 oKST2 oKST3 oKST4].include? @outcome_id
         end
 
         def hit_ends_ab?
@@ -118,16 +121,13 @@ module Sportradar
           @warming_up             = "#{data['preferred_name'] || data['first_name']} #{data['last_name']}"
         end
 
-        def parse_steal(data)
+        def parse_steal(data); end
 
-        end
+        { 'type' => 'steal', 'id' => '76762fd9-683c-42f2-8c72-8d9fd4f5bc7b', 'status' => 'official', 'created_at' => '2017-05-06T02:56:49+00:00', 'pitcher' => { 'id' => '9dd06397-4353-44e8-81bb-6e88a75e42b5' }, 'runners' => [{ 'id' => '3e39fe20-6dca-4894-807b-1ce76ff93e29', 'starting_base' => 1, 'ending_base' => 1, 'outcome_id' => '', 'out' => false, 'last_name' => 'Owings', 'first_name' => 'Christopher', 'preferred_name' => 'Chris', 'jersey_number' => '16' }] }
 
-        {"type"=>"steal", "id"=>"76762fd9-683c-42f2-8c72-8d9fd4f5bc7b", "status"=>"official", "created_at"=>"2017-05-06T02:56:49+00:00", "pitcher"=>{"id"=>"9dd06397-4353-44e8-81bb-6e88a75e42b5"}, "runners"=>[{"id"=>"3e39fe20-6dca-4894-807b-1ce76ff93e29", "starting_base"=>1, "ending_base"=>1, "outcome_id"=>"", "out"=>false, "last_name"=>"Owings", "first_name"=>"Christopher", "preferred_name"=>"Chris", "jersey_number"=>"16"}]}
-
-        {"type"=>"steal", "id"=>"df01b116-afcd-467f-9b9c-99d3891629c6", "status"=>"official", "created_at"=>"2017-05-06T03:00:58+00:00", "pitcher"=>{"id"=>"90fb6719-5135-42f3-88c0-0ccde448368c"}, "runners"=>[{"id"=>"106e6fb6-6460-412e-abdb-9f73469a27b9", "starting_base"=>1, "ending_base"=>1, "outcome_id"=>"CK", "out"=>false, "last_name"=>"DeShields", "first_name"=>"Delino", "preferred_name"=>"Delino", "jersey_number"=>"3"}]}
-        {"type"=>"steal", "id"=>"37c9192d-cac9-4320-b721-f68955eecf24", "status"=>"official", "created_at"=>"2017-05-06T03:02:16+00:00", "pitcher"=>{"id"=>"90fb6719-5135-42f3-88c0-0ccde448368c"}, "runners"=>[{"id"=>"106e6fb6-6460-412e-abdb-9f73469a27b9", "starting_base"=>1, "ending_base"=>1, "outcome_id"=>"CK", "out"=>false, "last_name"=>"DeShields", "first_name"=>"Delino", "preferred_name"=>"Delino", "jersey_number"=>"3"}]}
-        {"type"=>"steal", "id"=>"b8dcebfa-e02c-470e-ba73-e9b6b553cc0d", "status"=>"official", "created_at"=>"2017-05-06T03:38:48+00:00", "pitcher"=>{"id"=>"1a2638a3-28df-46b3-9cca-0f8eb29b581f"}, "runners"=>[{"id"=>"2847c4e0-01be-46bd-992e-701ee447e3f5", "starting_base"=>1, "ending_base"=>1, "outcome_id"=>"CK", "out"=>false, "last_name"=>"Upton", "first_name"=>"Justin", "preferred_name"=>"Justin", "jersey_number"=>"8"}, {"id"=>"f27a7574-57db-4eeb-8f88-377048806de2", "starting_base"=>3, "ending_base"=>3, "outcome_id"=>"", "out"=>false, "last_name"=>"Martínez", "first_name"=>"Victor", "preferred_name"=>"Victor", "jersey_number"=>"41"}]}
-
+        { 'type' => 'steal', 'id' => 'df01b116-afcd-467f-9b9c-99d3891629c6', 'status' => 'official', 'created_at' => '2017-05-06T03:00:58+00:00', 'pitcher' => { 'id' => '90fb6719-5135-42f3-88c0-0ccde448368c' }, 'runners' => [{ 'id' => '106e6fb6-6460-412e-abdb-9f73469a27b9', 'starting_base' => 1, 'ending_base' => 1, 'outcome_id' => 'CK', 'out' => false, 'last_name' => 'DeShields', 'first_name' => 'Delino', 'preferred_name' => 'Delino', 'jersey_number' => '3' }] }
+        { 'type' => 'steal', 'id' => '37c9192d-cac9-4320-b721-f68955eecf24', 'status' => 'official', 'created_at' => '2017-05-06T03:02:16+00:00', 'pitcher' => { 'id' => '90fb6719-5135-42f3-88c0-0ccde448368c' }, 'runners' => [{ 'id' => '106e6fb6-6460-412e-abdb-9f73469a27b9', 'starting_base' => 1, 'ending_base' => 1, 'outcome_id' => 'CK', 'out' => false, 'last_name' => 'DeShields', 'first_name' => 'Delino', 'preferred_name' => 'Delino', 'jersey_number' => '3' }] }
+        { 'type' => 'steal', 'id' => 'b8dcebfa-e02c-470e-ba73-e9b6b553cc0d', 'status' => 'official', 'created_at' => '2017-05-06T03:38:48+00:00', 'pitcher' => { 'id' => '1a2638a3-28df-46b3-9cca-0f8eb29b581f' }, 'runners' => [{ 'id' => '2847c4e0-01be-46bd-992e-701ee447e3f5', 'starting_base' => 1, 'ending_base' => 1, 'outcome_id' => 'CK', 'out' => false, 'last_name' => 'Upton', 'first_name' => 'Justin', 'preferred_name' => 'Justin', 'jersey_number' => '8' }, { 'id' => 'f27a7574-57db-4eeb-8f88-377048806de2', 'starting_base' => 3, 'ending_base' => 3, 'outcome_id' => '', 'out' => false, 'last_name' => 'Martínez', 'first_name' => 'Victor', 'preferred_name' => 'Victor', 'jersey_number' => '41' }] }
 
         def self.pitch_type(code)
           pitch_types[code]
@@ -146,12 +146,14 @@ module Sportradar
             'SC' => 'Screwball',
             'FO' => 'Forkball',
             'IB' => 'Intentional Ball',
-            'PI' => 'Pitchout',
+            'PI' => 'Pitchout'
           }
         end
+
         def self.pitch_outcome(code)
           pitch_outcomes[code]
         end
+
         def self.pitch_outcomes
           @pitch_outcomes ||= {
             'aBK'     => 'Balk',
@@ -235,10 +237,10 @@ module Sportradar
             'oST2'    => 'Single - Out at 2nd',
             'oST3'    => 'Single - Out at 3rd',
             'oST4'    => 'Single - Out at Home',
-            'oTT4'    => 'Triple - Out at Home',
+            'oTT4'    => 'Triple - Out at Home'
           }
         end
-        {"type"=>"steal", "id"=>"01ead210-1586-4d07-9713-6fd3d17b2b4c", "status"=>"official", "created_at"=>"2017-05-15T23:55:53+00:00", "pitcher"=>{"id"=>"9c12832b-c487-40d4-915b-e44097632d7c"}, "runners"=>[{"id"=>"65de4cd1-ca86-468c-9346-1e68d6279a8e", "starting_base"=>1, "ending_base"=>0, "outcome_id"=>"PO", "out"=>true, "last_name"=>"Gordon", "first_name"=>"Devaris", "preferred_name"=>"Dee", "jersey_number"=>"9", "description"=>"Dee Gordon picked off.", "fielders"=>[{"id"=>"bd519b9f-7539-4282-a741-3bd2bf532c40", "type"=>"putout", "sequence"=>1, "last_name"=>"Gurriel", "first_name"=>"Yulieski", "preferred_name"=>"Yulieski", "jersey_number"=>"10"}, {"id"=>"9c12832b-c487-40d4-915b-e44097632d7c", "type"=>"assist", "sequence"=>1, "last_name"=>"Musgrove", "first_name"=>"Joseph", "preferred_name"=>"Joe", "jersey_number"=>"59"}]}]}
+        { 'type' => 'steal', 'id' => '01ead210-1586-4d07-9713-6fd3d17b2b4c', 'status' => 'official', 'created_at' => '2017-05-15T23:55:53+00:00', 'pitcher' => { 'id' => '9c12832b-c487-40d4-915b-e44097632d7c' }, 'runners' => [{ 'id' => '65de4cd1-ca86-468c-9346-1e68d6279a8e', 'starting_base' => 1, 'ending_base' => 0, 'outcome_id' => 'PO', 'out' => true, 'last_name' => 'Gordon', 'first_name' => 'Devaris', 'preferred_name' => 'Dee', 'jersey_number' => '9', 'description' => 'Dee Gordon picked off.', 'fielders' => [{ 'id' => 'bd519b9f-7539-4282-a741-3bd2bf532c40', 'type' => 'putout', 'sequence' => 1, 'last_name' => 'Gurriel', 'first_name' => 'Yulieski', 'preferred_name' => 'Yulieski', 'jersey_number' => '10' }, { 'id' => '9c12832b-c487-40d4-915b-e44097632d7c', 'type' => 'assist', 'sequence' => 1, 'last_name' => 'Musgrove', 'first_name' => 'Joseph', 'preferred_name' => 'Joe', 'jersey_number' => '59' }] }] }
       end
     end
   end

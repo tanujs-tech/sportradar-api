@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Sportradar
   module Api
     class << self
@@ -18,17 +20,16 @@ module Sportradar
 
       def initialize
         @api_key = ENV['API_KEY']
-        @api_timeout = ENV.fetch('SPORTRADAR_API_TIMEOUT', 15 )
+        @api_timeout = ENV.fetch('SPORTRADAR_API_TIMEOUT', 15)
         @use_ssl = ENV.fetch('SPORTRADAR_API_USE_SSL', true)
-        @format = ENV.fetch("SPORTRADAR_API_FORMAT", :xml).to_s
+        @format = ENV.fetch('SPORTRADAR_API_FORMAT', :xml).to_s
       end
 
       def reset
-        @api_timeout = ENV.fetch('SPORTRADAR_API_TIMEOUT', 15 )
+        @api_timeout = ENV.fetch('SPORTRADAR_API_TIMEOUT', 15)
         @use_ssl = ENV.fetch('SPORTRADAR_API_USE_SSL', true)
-        @format = ENV.fetch("SPORTRADAR_API_FORMAT", :xml).to_s
+        @format = ENV.fetch('SPORTRADAR_API_FORMAT', :xml).to_s
       end
     end
   end
 end
-

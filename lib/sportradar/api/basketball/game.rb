@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Sportradar
   module Api
     module Basketball
@@ -41,6 +43,7 @@ module Sportradar
 
           update(data, **opts)
         end
+
         def timeouts
           {}
         end
@@ -48,9 +51,11 @@ module Sportradar
         def tied?
           @score[away_id].to_i == @score[home_id].to_i
         end
+
         def points(team_id)
           team_id.is_a?(Symbol) ? @score[@team_ids[team_id]].to_i : @score[team_id].to_i
         end
+
         def stats(team_id)
           team_id.is_a?(Symbol) ? @team_stats[@team_ids[team_id]].to_i : @team_stats[team_id].to_i
         end
@@ -58,12 +63,15 @@ module Sportradar
         def scoring
           @scoring_raw.scores
         end
+
         def update_score(score)
           @score.merge!(score)
         end
+
         def update_stats(team, stats)
           @team_stats.merge!(team.id => stats.merge!(team: team))
         end
+
         def update_player_stats(player, stats)
           @player_stats.merge!(player.id => stats.merge!(player: player))
         end
@@ -72,13 +80,14 @@ module Sportradar
           update_score(data.dig('home', 'id') => data.dig('home', 'points').to_i)
           update_score(data.dig('away', 'id') => data.dig('away', 'points').to_i)
         end
+
         def clock_seconds
           return unless @clock
-          m,s = @clock.split(':')
+          m, s = @clock.split(':')
           m.to_i * 60 + s.to_i
         end
 
-        def update(data, source: nil, **opts)
+        def update(data, source: nil, **_opts)
           # via pbp
           @title        = data['title']                 if data['title']
           @status       = data['status']                if data['status']
@@ -88,7 +97,7 @@ module Sportradar
           @home_points  = data['home_points'].to_i      if data['home_points']
           @away_points  = data['away_points'].to_i      if data['away_points']
 
-          @scheduled    = Time.parse(data["scheduled"]) if data["scheduled"]
+          @scheduled    = Time.parse(data['scheduled']) if data['scheduled']
           @venue        = Venue.new(data['venue']) if data['venue']
           @broadcast    = Broadcast.new(data['broadcast']) if data['broadcast']
           @home         = team_class.new(data['home'], api: api, game: self) if data['home']
@@ -100,7 +109,7 @@ module Sportradar
           @lead_changes = data['lead_changes']          if data['lead_changes']
           @times_tied   = data['times_tied']            if data['times_tied']
 
-          @team_ids     = { home: @home_id, away: @away_id}
+          @team_ids     = { home: @home_id, away: @away_id }
 
           update_score(@home_id => @home_points.to_i) if @home_points
           update_score(@away_id => @away_points.to_i) if @away_points
@@ -122,16 +131,20 @@ module Sportradar
           return nil if score.values.uniq.size == 1
           score.max_by(&:last).first
         end
+
         def leading_team
           @teams_hash[leading_team_id] || (@away_id == leading_team_id && away) || (@home_id == leading_team_id && home)
         end
+
         def team(team_id)
           @teams_hash[team_id]
         end
+
         def assign_home(team)
           @home_id = team.id
           @teams_hash[team.id] = team
         end
+
         def assign_away(team)
           @away_id = team.id
           @teams_hash[team.id] = team
@@ -140,43 +153,47 @@ module Sportradar
         def box
           @box ||= get_box
         end
+
         def pbp
-          if !future? && periods.empty?
-            get_pbp
-          end
+          get_pbp if !future? && periods.empty?
           @pbp ||= periods
         end
+
         def plays
           periods.flat_map(&:plays)
         end
+
         def plays_by_type(play_type, *types)
           if types.empty?
             plays.grep(Play.subclass(play_type.delete('_')))
           else
             play_classes = [play_type, *types].map { |type| Play.subclass(type.delete('_')) }
-            plays.select { |play| play_classes.any? { |klass| play.kind_of?(klass) } }
+            plays.select { |play| play_classes.any? { |klass| play.is_a?(klass) } }
           end
         end
+
         def summary
           @summary ||= get_summary
         end
-        alias :events :plays
+        alias events plays
 
         def periods
           @periods_hash.values
         end
 
-
         # tracking updates
         def remember(key, object)
           @updates[key] = object&.dup
         end
+
         def not_updated?(key, object)
           @updates[key] == object
         end
+
         def changed?(key)
           @changes[key]
         end
+
         def check_newness(key, new_object)
           @changes[key] = !not_updated?(key, new_object)
           remember(key, new_object)
@@ -184,40 +201,50 @@ module Sportradar
 
         # url paths
         def path_base
-          "games/#{ id }"
+          "games/#{id}"
         end
+
         def path_box
-          "#{ path_base }/boxscore"
+          "#{path_base}/boxscore"
         end
+
         def path_pbp
-          "#{ path_base }/pbp"
+          "#{path_base}/pbp"
         end
+
         def path_summary
-          "#{ path_base }/summary"
+          "#{path_base}/summary"
         end
 
         # status helpers
         def postponed?
           'postponed' == status
         end
+
         def unnecessary?
           'unnecessary' == status
         end
+
         def cancelled?
-          ['unnecessary', 'postponed'].include? status
+          %w[unnecessary postponed].include? status
         end
+
         def future?
           ['scheduled', 'delayed', 'created', 'time-tbd', 'if-necessary'].include? status
         end
+
         def started?
-          ['inprogress', 'halftime', 'delayed'].include? status
+          %w[inprogress halftime delayed].include? status
         end
+
         def finished?
-          ['complete', 'closed'].include? status
+          %w[complete closed].include? status
         end
+
         def completed?
           'complete' == status
         end
+
         def closed?
           'closed' == status
         end
@@ -238,7 +265,7 @@ module Sportradar
 
         def queue_pbp
           url, headers, options, timeout = api.get_request_info(path_pbp)
-          {url: url, headers: headers, params: options, timeout: timeout, callback: method(:ingest_pbp)}
+          { url: url, headers: headers, params: options, timeout: timeout, callback: method(:ingest_pbp) }
         end
 
         def get_pbp
@@ -250,12 +277,12 @@ module Sportradar
           period_name = 'periods'
           update(data, source: :pbp)
           period_data = if data[period_name] && !data[period_name].empty?
-            @period = data[period_name].last['sequence'].to_i
-            pers = data[period_name]
-            pers.is_a?(Array) && (pers.size == 1) ? pers[0] : pers
-          else
-            @period = nil
-            []
+                          @period = data[period_name].last['sequence'].to_i
+                          pers = data[period_name]
+                          pers.is_a?(Array) && (pers.size == 1) ? pers[0] : pers
+                        else
+                          @period = nil
+                          []
           end
           if data['overtime']
             extra_periods = data['overtime'].is_a?(Hash) ? [data['overtime']] : data['overtime']
@@ -275,7 +302,7 @@ module Sportradar
 
         def queue_summary
           url, headers, options, timeout = api.get_request_info(path_summary)
-          {url: url, headers: headers, params: options, timeout: timeout, callback: method(:ingest_summary)}
+          { url: url, headers: headers, params: options, timeout: timeout, callback: method(:ingest_summary) }
         end
 
         def ingest_summary(data)
@@ -288,7 +315,7 @@ module Sportradar
 
         def set_pbp(data)
           create_data(@periods_hash, data, klass: period_class, api: api, game: self)
-          @plays  = nil # to clear empty array empty
+          @plays = nil # to clear empty array empty
           @periods_hash
         end
 
@@ -303,7 +330,6 @@ module Sportradar
         # @abstract Subclass is expected to implement #api
         # @!method api
         #    The base for the requests needed for a subclass
-
       end
     end
   end

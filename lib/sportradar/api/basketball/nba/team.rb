@@ -1,10 +1,10 @@
+# frozen_string_literal: true
+
 module Sportradar
   module Api
     module Basketball
       class Nba
         class Team < Sportradar::Api::Basketball::Team
-
-
           @all_hash = {}
           def self.new(data, **opts)
             existing = @all_hash[data['id']]
@@ -18,6 +18,7 @@ module Sportradar
               @all_hash[data['id']] = super
             end
           end
+
           def self.all
             @all_hash.values
           end
@@ -50,7 +51,6 @@ module Sportradar
               @full_name = [@market, data['name']].join(' ')
             end
           end
-
         end
       end
     end

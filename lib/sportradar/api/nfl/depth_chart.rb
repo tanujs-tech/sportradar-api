@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Sportradar
   module Api
     class Nfl::DepthChart < Data
@@ -41,7 +43,6 @@ module Sportradar
           memo[position['name']] = players.group_by(&:depth)
         end
       end
-
     end
   end
 end

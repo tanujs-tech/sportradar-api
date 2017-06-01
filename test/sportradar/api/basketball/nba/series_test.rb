@@ -1,7 +1,8 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class Sportradar::Api::Basketball::Nba::SeriesTest < Minitest::Test
-
   def setup
     sr = Sportradar::Api::Basketball::Nba.new
     VCR.use_cassette("nba/#{sr.content_format}/league/series") do
@@ -10,7 +11,7 @@ class Sportradar::Api::Basketball::Nba::SeriesTest < Minitest::Test
   end
 
   def test_it_initializes_an_nba_season
-    assert [:id, :name, :alias].all? { |att| @season.send(att) }
+    assert %i[id name alias].all? { |att| @season.send(att) }
     assert_instance_of Sportradar::Api::Basketball::Nba::Season, @season
   end
 
@@ -23,5 +24,4 @@ class Sportradar::Api::Basketball::Nba::SeriesTest < Minitest::Test
     attributes = %i[id status title round start_date]
     assert @season.series.all? { |series| attributes.all? { |att| series.send(att) } }
   end
-
 end

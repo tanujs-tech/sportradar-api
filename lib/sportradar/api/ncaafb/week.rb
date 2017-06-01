@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Sportradar
   module Api
     class Ncaafb
@@ -12,9 +14,7 @@ module Sportradar
           # @year     = response['year']
           # @type     = response['type']
           @sequence = response['week']
-
         rescue => e
-          binding.pry
         end
 
         def number
@@ -24,9 +24,8 @@ module Sportradar
         # private
 
         def games
-          @games ||= parse_into_array_with_options(selector: response["game"], klass: Sportradar::Api::Ncaafb::Game, api: @api, week: self)
+          @games ||= parse_into_array_with_options(selector: response['game'], klass: Sportradar::Api::Ncaafb::Game, api: @api, week: self)
         end
-
       end
     end
   end

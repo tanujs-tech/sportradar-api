@@ -1,7 +1,8 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class Sportradar::Api::Basketball::Ncaamb::ScheduleTest < Minitest::Test
-
   def setup
     sr = Sportradar::Api::Basketball::Ncaamb.new
     VCR.use_cassette("ncaamb/#{sr.content_format}/league/daily_schedule-20170121") do
@@ -10,7 +11,7 @@ class Sportradar::Api::Basketball::Ncaamb::ScheduleTest < Minitest::Test
   end
 
   def test_it_initializes_an_ncaamb_schedule
-    assert [:id, :name, :alias, :date].all? { |att| @schedule.send(att) }
+    assert %i[id name alias date].all? { |att| @schedule.send(att) }
     assert_instance_of Sportradar::Api::Basketball::Ncaamb::Schedule, @schedule
   end
 
@@ -23,5 +24,4 @@ class Sportradar::Api::Basketball::Ncaamb::ScheduleTest < Minitest::Test
     attributes = %i[id status coverage scheduled home away]
     assert @schedule.games.reject(&:postponed?).all? { |game| attributes.all? { |att| game.send(att) } }
   end
-
 end

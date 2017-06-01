@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Sportradar
   module Api
     class Nfl::Coach < Data
@@ -5,13 +7,12 @@ module Sportradar
 
       def initialize(data)
         @response = data
-        @id = data["id"]
-        @full_name = data["full_name"]
-        @first_name = data["first_name"]
-        @last_name = data["last_name"]
-        @position = data["position"]
+        @id = data['id']
+        @full_name = data['full_name']
+        @first_name = data['first_name']
+        @last_name = data['last_name']
+        @position = data['position']
       end
-
     end
   end
 end

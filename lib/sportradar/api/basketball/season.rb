@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Sportradar
   module Api
     module Basketball
@@ -13,7 +15,6 @@ module Sportradar
         #   @alias    = response['alias']
 
         # end
-
       end
     end
   end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Sportradar
   module Api
     class Mma
@@ -14,6 +16,7 @@ module Sportradar
             @all_hash[data['id']] = super
           end
         end
+
         def self.all
           @all_hash.values
         end
@@ -24,7 +27,7 @@ module Sportradar
           @event    = opts[:event]
           @fighters_hash = {}
 
-          @id       = data['id']
+          @id = data['id']
 
           update(data)
         end
@@ -38,7 +41,7 @@ module Sportradar
           result.scores
         end
 
-        def update(data, **opts)
+        def update(data, **_opts)
           @accolade         = data['accolade']         if data['accolade']
           @scheduled_rounds = data['scheduled_rounds'] if data['scheduled_rounds'] # "3",
           @weight_class     = data['weight_class']     if data['weight_class'] # {"id"=>"LW", "weight"=>"146-155", "description"=>"Lightweight"},
@@ -51,13 +54,13 @@ module Sportradar
           self
         end
 
-        def update_fighters(data)
+        def update_fighters(_data)
           create_data(@fighters_hash, response.dig('fighters', 'fighter'), klass: Fighter, api: api, fight: self)
         end
+
         def api
           @api ||= Sportradar::Api::Mma.new
         end
-
 
         # def path_base
         #   "games/#{ id }"
@@ -89,8 +92,7 @@ module Sportradar
         #   @quarters
         # end
 
-        KEYS_SCHED = ["id", "name", "scheduled", "venue", "league", "fights"]
-
+        KEYS_SCHED = %w[id name scheduled venue league fights].freeze
       end
     end
   end

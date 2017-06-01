@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Sportradar
   module Api
     module Baseball
@@ -8,18 +10,17 @@ module Sportradar
           @response = data
           @api      = opts[:api]
           @inning   = opts[:inning]
-          @id       = data["id"]
+          @id       = data['id']
           *@inning_id, @number, @half = data['id'].split('-')
 
           @events_hash = {}
 
           update(data)
-
         end
 
-        def update(data, **opts)
+        def update(data, **_opts)
           @half     = data['half']
-          @events   = data['events'].map{ |hash| Event.new(hash, half_inning: self) }
+          @events   = data['events'].map { |hash| Event.new(hash, half_inning: self) }
           # create_data(@events_hash, data['events'], klass: Event, api: @api, half_inning: self)
         end
 
@@ -39,13 +40,10 @@ module Sportradar
           # events_by_klass(LineupChange)
         end
 
-        def events
-          # @events_hash.values
-          @events
-        end
+        attr_reader :events
 
         def hits
-          at_bats.flat_map(&:pitches).select {|pitch| pitch.is_hit }
+          at_bats.flat_map(&:pitches).select(&:is_hit)
         end
 
         def hit_count
@@ -62,7 +60,6 @@ module Sportradar
         # private def events_by_klass(klass)
         #   @events_hash.each_value.grep(klass)
         # end
-
       end
     end
   end

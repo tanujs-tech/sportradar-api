@@ -1,9 +1,10 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class Sportradar::Api::Basketball::Nba::GameFutureTest < Minitest::Test
-
   def setup
-    @game = Sportradar::Api::Basketball::Nba::Game.new('id' => "fdebfa54-dbdb-4992-baa0-729394bd9610")
+    @game = Sportradar::Api::Basketball::Nba::Game.new('id' => 'fdebfa54-dbdb-4992-baa0-729394bd9610')
   end
 
   def test_nba_game_get_pbp
@@ -18,5 +19,4 @@ class Sportradar::Api::Basketball::Nba::GameFutureTest < Minitest::Test
       assert_equal ({}), @game.scoring
     end
   end
-
 end

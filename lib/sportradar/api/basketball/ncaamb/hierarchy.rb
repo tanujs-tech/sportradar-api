@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Sportradar
   module Api
     module Basketball
@@ -5,12 +7,12 @@ module Sportradar
         class Hierarchy < Data
           attr_accessor :response, :id, :name, :alias
           def all_attributes
-            [:name, :alias, :conferences, :divisions, :teams]
+            %i[name alias conferences divisions teams]
           end
 
           def initialize(data, **opts)
             # @response = data
-            @api      = opts[:api]
+            @api = opts[:api]
 
             @id    = data.dig('league', 'id')
             @name  = data.dig('league', 'name')
@@ -18,9 +20,11 @@ module Sportradar
 
             @divisions_hash = create_data({}, data['divisions'], klass: Division, hierarchy: self, api: @api)
           end
+
           def divisions
             @divisions_hash.values
           end
+
           def division(code_name)
             divisions_by_name[code_name]
           end
@@ -30,6 +34,7 @@ module Sportradar
           def conferences
             divisions.flat_map(&:conferences)
           end
+
           def teams
             conferences.flat_map(&:teams)
           end
@@ -37,7 +42,6 @@ module Sportradar
           def api
             @api || Sportradar::Api::Basketball::Ncaamb.new
           end
-
         end
       end
     end

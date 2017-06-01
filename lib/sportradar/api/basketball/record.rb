@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Sportradar
   module Api
     module Basketball
@@ -15,7 +17,7 @@ module Sportradar
           Profile.new(self)
         end
 
-        def update(data, **opts)
+        def update(data, **_opts)
           @wins           = data['wins'].to_i
           @losses         = data['losses'].to_i
           @win_pct        = data['win_pct'].to_f
@@ -25,7 +27,6 @@ module Sportradar
           @games_behind   = data['games_behind']
           @streak         = data['streak']
         end
-
       end
     end
   end

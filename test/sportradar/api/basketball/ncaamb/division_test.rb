@@ -1,7 +1,8 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class Sportradar::Api::Basketball::Ncaamb::DivisionTest < Minitest::Test
-
   def setup
     sr = Sportradar::Api::Basketball::Ncaamb.new
     VCR.use_cassette("ncaamb/#{sr.content_format}/league/hierarchy") do
@@ -11,7 +12,7 @@ class Sportradar::Api::Basketball::Ncaamb::DivisionTest < Minitest::Test
   end
 
   def test_it_initializes_an_ncaamb_division
-    assert [:name, :alias].all? { |att| @division.send(att) }
+    assert %i[name alias].all? { |att| @division.send(att) }
     assert_instance_of Sportradar::Api::Basketball::Ncaamb::Division, @division
   end
 
@@ -31,5 +32,4 @@ class Sportradar::Api::Basketball::Ncaamb::DivisionTest < Minitest::Test
     assert_instance_of Sportradar::Api::Basketball::Ncaamb::Team, team
     assert_equal 'ARIZ', team.alias
   end
-
 end

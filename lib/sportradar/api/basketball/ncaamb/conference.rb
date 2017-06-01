@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Sportradar
   module Api
     module Basketball
@@ -7,22 +9,24 @@ module Sportradar
 
           def initialize(data, **opts)
             # @response = data
-            @api      = opts[:api]
+            @api = opts[:api]
 
-            @id    = data["id"]
-            @name  = data["name"]
-            @alias = data["alias"]
+            @id    = data['id']
+            @name  = data['name']
+            @alias = data['alias']
             @assigned_teams = nil
 
-            @teams_hash = create_data({}, data["teams"], klass: Team, conference: self, api: @api) # if data["team"]
+            @teams_hash = create_data({}, data['teams'], klass: Team, conference: self, api: @api) # if data["team"]
           end
 
           def teams
             @assigned_teams || @teams_hash.values
           end
+
           def teams=(array)
             @assigned_teams = array
           end
+
           def team(code_name)
             teams_by_name[code_name]
           end
@@ -32,10 +36,8 @@ module Sportradar
           def conferences
             teams.flat_map(&:conferences)
           end
-
         end
       end
     end
   end
 end
-

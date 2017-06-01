@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Sportradar
   module Api
     class Images::Link < Data
@@ -5,11 +7,10 @@ module Sportradar
 
       def initialize(data)
         @response = data
-        @width = data["width"]
-        @height = data["height"]
-        @href = data["href"]
+        @width = data['width']
+        @height = data['height']
+        @href = data['href']
       end
-
     end
   end
 end

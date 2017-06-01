@@ -1,7 +1,8 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class Sportradar::Api::Baseball::Mlb::HierarchyTest < Minitest::Test
-
   def setup
     @mlb = Sportradar::Api::Baseball::Mlb::Hierarchy.new
   end
@@ -40,7 +41,7 @@ class Sportradar::Api::Baseball::Mlb::HierarchyTest < Minitest::Test
     VCR.use_cassette("mlb/#{@mlb.api.content_format}/hierarchy/hierarchy") do
       @mlb.get_hierarchy
       assert_instance_of Sportradar::Api::Baseball::Venue, @mlb.teams.first.venue
-      assert @mlb.teams.all? { |team| attributes.all? { |att| team.venue.send(att)} }
+      assert @mlb.teams.all? { |team| attributes.all? { |att| team.venue.send(att) } }
     end
   end
 
@@ -48,7 +49,7 @@ class Sportradar::Api::Baseball::Mlb::HierarchyTest < Minitest::Test
     attributes = %i[id name alias market full_name]
     VCR.use_cassette("mlb/#{@mlb.api.content_format}/hierarchy/hierarchy") do
       @mlb.get_hierarchy
-      assert @mlb.teams.all? { |team| attributes.all? { |att| team.send(att)} }
+      assert @mlb.teams.all? { |team| attributes.all? { |att| team.send(att) } }
     end
   end
 
@@ -57,7 +58,7 @@ class Sportradar::Api::Baseball::Mlb::HierarchyTest < Minitest::Test
       assert_equal 0, @mlb.games.count
       @mlb.schedule
       assert_respond_to @mlb.schedule, :games
-      assert_equal 81*30, @mlb.games.reject(&:cancelled?).size # 30 teams * 81 home games
+      assert_equal 81 * 30, @mlb.games.reject(&:cancelled?).size # 30 teams * 81 home games
     end
   end
 
@@ -67,8 +68,7 @@ class Sportradar::Api::Baseball::Mlb::HierarchyTest < Minitest::Test
       assert_equal 0, @mlb.teams.count
       @mlb.standings
       assert_equal 30, @mlb.teams.count
-      assert @mlb.teams.all? { |team| attributes.all? { |att| team.record.send(att)} }
+      assert @mlb.teams.all? { |team| attributes.all? { |att| team.record.send(att) } }
     end
   end
-
 end

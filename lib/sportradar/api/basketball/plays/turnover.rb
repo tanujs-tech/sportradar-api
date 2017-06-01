@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Sportradar
   module Api
     module Basketball
@@ -6,12 +8,14 @@ module Sportradar
         def base_key
           'turnover'
         end
+
         def display_type
           'Turnover'
         end
+
         def parse_statistics(data)
           super
-          @steal = Steal.new(data, quarter: @quarter, half: @half) if @statistics.detect { |hash|  hash['type'] == 'steal' }
+          @steal = Steal.new(data, quarter: @quarter, half: @half) if @statistics.detect { |hash| hash['type'] == 'steal' }
         end
       end
     end

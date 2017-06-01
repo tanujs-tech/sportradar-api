@@ -1,28 +1,30 @@
+# frozen_string_literal: true
+
 module Sportradar
   module Api
     class LiveImages < Request
       attr_accessor :sport, :access_level
 
-      def initialize( sport, access_level = 't')
+      def initialize(sport, access_level = 't')
         raise Sportradar::Api::Error::InvalidSport unless allowed_sports.include? sport
         @sport = sport
         raise Sportradar::Api::Error::InvalidAccessLevel unless allowed_access_levels.include? access_level
         @access_level = access_level
       end
 
-      def daily_manifest(date = Date.today )
-        response = get request_url("#{image_type }/#{date.to_s}/manifests/all_assets")
-        if response.success? && response["assetlist"]
-          Sportradar::Api::Images::AssetList.new response["assetlist"]
+      def daily_manifest(date = Date.today)
+        response = get request_url("#{image_type}/#{date}/manifests/all_assets")
+        if response.success? && response['assetlist']
+          Sportradar::Api::Images::AssetList.new response['assetlist']
         else
           response
         end
       end
-      alias_method :all_images, :daily_manifest
+      alias all_images daily_manifest
 
       # The Event images APIs aren't really meant to be used directly, the manifests return an href path of an image we can pass it into the image_url method to get the entire image url
       def image_url(href)
-        href.slice!(0) if href.chars.first == '/'  # remove initial '/'
+        href.slice!(0) if href.chars.first == '/' # remove initial '/'
         set_base request_url(href) + api_key_query_string
       end
 
@@ -34,11 +36,10 @@ module Sportradar
 
       def api_key
         if access_level == 'p'
-          Sportradar::Api.api_key_params("live_images_#{sport}", "production")
+          Sportradar::Api.api_key_params("live_images_#{sport}", 'production')
         else
           Sportradar::Api.api_key_params("live_images_#{sport}")
         end
-
       end
 
       def api_key_query_string
@@ -58,13 +59,12 @@ module Sportradar
       end
 
       def allowed_access_levels
-        ['p', 't']
+        %w[p t]
       end
 
       def allowed_sports
-        ['golf', 'mlb', 'nascar', 'nba', 'nfl', 'nhl', 'ncaafb', 'ncaamb', 'mls']
+        %w[golf mlb nascar nba nfl nhl ncaafb ncaamb mls]
       end
-
     end
   end
 end

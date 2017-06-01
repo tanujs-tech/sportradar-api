@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Sportradar
   module Api
     class Ncaafb
@@ -29,10 +31,12 @@ module Sportradar
           @jersey_number = response['jersey_number']  # => "31",
           @status        = response['status']         # => "ACT",
         end
+
         def full_name
           # (market || name) ? [market, name].join(' ') : id
           name_full || [name_first, name_last].join(' ')
         end
+
         def update(data)
           @name_full     = data['name_full']      if data['name_full']
           @name_first    = data['name_first']     if data['name_first']
@@ -45,16 +49,15 @@ module Sportradar
           @jersey_number = data['jersey_number']  if data['jersey_number']
           @status        = data['status']         if data['status']
         end
+
         def parse_players(data)
           # @players = parse_into_array_with_options(data)
           # data
         end
 
-
         def api
           @api || Sportradar::Api::Ncaafb.new
         end
-
       end
     end
   end

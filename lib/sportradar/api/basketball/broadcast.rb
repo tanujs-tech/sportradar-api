@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Sportradar
   module Api
     module Basketball
@@ -6,9 +8,8 @@ module Sportradar
 
         def initialize(data)
           @response = data
-          @network = data["network"]
+          @network = data['network']
         end
-
       end
     end
   end

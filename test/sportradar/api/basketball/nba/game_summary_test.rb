@@ -1,10 +1,11 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class Sportradar::Api::Basketball::Nba::GameSummaryTest < Minitest::Test
-
   def setup
     # ESPN boxscore: http://www.espn.com/nba/boxscore?gameId=400900063
-    @attrs = { "id" => "3700bb52-50f0-4929-b6b0-ae0b3cbad019" }
+    @attrs = { 'id' => '3700bb52-50f0-4929-b6b0-ae0b3cbad019' }
     @game = Sportradar::Api::Basketball::Nba::Game.new(@attrs)
     VCR.use_cassette("nba/#{@game.api.content_format}/game/summary_regulation") do
       data = @game.get_summary
@@ -32,7 +33,7 @@ class Sportradar::Api::Basketball::Nba::GameSummaryTest < Minitest::Test
   def test_nba_game_summary_team_stats
     assert_includes @game.team_stats.keys, @away_id
     assert_includes @game.team_stats.keys, @home_id
-    
+
     assert_equal 29, @game.team_stats.dig(@away_id, 'field_goals_made').to_i
     assert_equal 40, @game.team_stats.dig(@home_id, 'field_goals_made').to_i
     assert_equal 86, @game.team_stats.dig(@away_id, 'field_goals_att').to_i
@@ -76,5 +77,4 @@ class Sportradar::Api::Basketball::Nba::GameSummaryTest < Minitest::Test
     assert_equal 20, @game.team_stats.dig(@away_id, 'personal_fouls').to_i
     assert_equal 13, @game.team_stats.dig(@home_id, 'personal_fouls').to_i
   end
-
 end

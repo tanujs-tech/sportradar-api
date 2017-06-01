@@ -1,14 +1,16 @@
+# frozen_string_literal: true
+
 module Sportradar
   module Api
     module Basketball
       class Ncaamb
         class Game < Sportradar::Api::Basketball::Game
-
           # NCAA MB specific
 
           def team_class
             Team
           end
+
           def period_class
             Half
           end
@@ -16,13 +18,12 @@ module Sportradar
           def period_name
             'half'
           end
-          alias :half :period
-          alias :halfs :periods
+          alias half period
+          alias halfs periods
 
           def api
             @api || Sportradar::Api::Basketball::Ncaamb.new
           end
-
         end
       end
     end

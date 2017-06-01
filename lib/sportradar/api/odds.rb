@@ -1,24 +1,27 @@
+# frozen_string_literal: true
+
 module Sportradar
   module Api
     class Odds < Request
       attr_accessor :access_level
 
-      def initialize( access_level = 't')
+      def initialize(access_level = 't')
         raise Sportradar::Api::Error::InvalidAccessLevel unless allowed_access_levels.include? access_level
         @access_level = access_level
       end
 
       def odds
-        get request_url, {format: 'none'}
+        get request_url, format: 'none'
       end
+
       private
 
-      def request_url(path = nil)
+      def request_url(_path = nil)
         "/odds-#{access_level}#{version}"
       end
 
       def api_key
-        Sportradar::Api.api_key_params("odds")
+        Sportradar::Api.api_key_params('odds')
       end
 
       def version
@@ -26,9 +29,8 @@ module Sportradar
       end
 
       def allowed_access_levels
-        ['p', 's', 'b', 't']
+        %w[p s b t]
       end
-
     end
   end
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Sportradar
   module Api
     class Soccer::Boxscore < Data
@@ -5,9 +7,8 @@ module Sportradar
 
       def initialize(data)
         @response = data
-        @matches = parse_into_array(selector: response["boxscore"]["matches"]["match"], klass: Sportradar::Api::Soccer::Match)  if response['boxscore'] && response['boxscore']['matches'] && response["boxscore"]["matches"]["match"]
+        @matches = parse_into_array(selector: response['boxscore']['matches']['match'], klass: Sportradar::Api::Soccer::Match) if response['boxscore'] && response['boxscore']['matches'] && response['boxscore']['matches']['match']
       end
-
     end
   end
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Sportradar
   module Api
     class Nfl::TeamDepthChart < Data
@@ -29,7 +31,7 @@ module Sportradar
       end
 
       def each
-        [:offense, :defense, :special_teams].each { |type| yield type, send(type) }
+        %i[offense defense special_teams].each { |type| yield type, send(type) }
       end
 
       # These aren't ever used, but handy if you need to invoke for testing
@@ -38,7 +40,6 @@ module Sportradar
       # def set_charts
       #   [offense, defense, special_teams]
       # end
-
     end
   end
 end

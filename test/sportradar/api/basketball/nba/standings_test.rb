@@ -1,7 +1,8 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class Sportradar::Api::Basketball::Nba::StandingsTest < Minitest::Test
-
   def setup
     sr = Sportradar::Api::Basketball::Nba.new
     VCR.use_cassette("nba/#{sr.content_format}/league/standings") do
@@ -26,5 +27,4 @@ class Sportradar::Api::Basketball::Nba::StandingsTest < Minitest::Test
     assert @standings.teams.all? { |team| team.record('over_500') }
     assert @standings.teams.all? { |team| team.record('below_500') }
   end
-
 end

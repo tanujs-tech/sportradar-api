@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Sportradar
   module Api
     module Basketball
@@ -5,6 +7,7 @@ module Sportradar
         def base_key
           'block'
         end
+
         def display_type
           'Block'
         end

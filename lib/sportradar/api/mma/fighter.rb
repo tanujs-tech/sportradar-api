@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Sportradar
   module Api
     class Mma
@@ -14,6 +16,7 @@ module Sportradar
             @all_hash[data['id']] = super
           end
         end
+
         def self.all
           @all_hash.values
         end
@@ -24,7 +27,7 @@ module Sportradar
           @roster   = opts[:roster]
           @fights_hash = {}
 
-          @id       = data['id']
+          @id = data['id']
 
           update(data)
         end
@@ -32,12 +35,12 @@ module Sportradar
         def fights
           @fights_hash.values
         end
+
         def add_fight(fight)
           @fights_hash[fight.id] = fight if fight
         end
 
-
-        def update(data, **opts)
+        def update(data, **_opts)
           @height     = data['height']     if data['height']     # "72",
           @weight     = data['weight']     if data['weight']     # "170",
           @reach      = data['reach']      if data['reach']      # "",
@@ -53,10 +56,11 @@ module Sportradar
         end
 
         def path_base
-          "participants/#{ id }"
+          "participants/#{id}"
         end
+
         def path_profile
-          "#{ path_base }/profile"
+          "#{path_base}/profile"
         end
 
         def get_profile
@@ -64,15 +68,13 @@ module Sportradar
           update(data)
           self
         end
+
         def api
           @api ||= Sportradar::Api::Mma.new
         end
 
-
-
-        KEYS_SCHED = ["id", "name", "scheduled", "venue", "league", "fights"]
-        KEYS_EVENT = ["height", "weight", "reach", "stance", "first_name", "nick_name", "last_name", "record"]
-
+        KEYS_SCHED = %w[id name scheduled venue league fights].freeze
+        KEYS_EVENT = %w[height weight reach stance first_name nick_name last_name record].freeze
       end
     end
   end

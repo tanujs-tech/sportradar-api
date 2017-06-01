@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Sportradar
   module Api
     class Mma
@@ -14,6 +16,7 @@ module Sportradar
             @all_hash[data['name']] = super
           end
         end
+
         def self.all
           @all_hash.values
         end
@@ -24,7 +27,7 @@ module Sportradar
           @event    = opts[:event]
           @events_hash = {}
 
-          @id       = data['id']
+          @id = data['id']
 
           update(data)
         end
@@ -32,18 +35,19 @@ module Sportradar
         def events
           @events_hash.values
         end
+
         def add_event(event)
           @events_hash[event.id] = event if event
         end
 
-        def update(data, **opts)
+        def update(data, **_opts)
           @name         = data['name']
           @country_code = data['country_code']
           @country      = data['country']
           @state        = data['state']
           @city         = data['city']
 
-          @id         = @name + ', ' + @city
+          @id = @name + ', ' + @city
 
           self
         end
@@ -51,13 +55,12 @@ module Sportradar
         def add_event(event)
           @events << event if event
         end
+
         def api
           @api ||= Sportradar::Api::Mma.new
         end
 
-
-        KEYS_SCHED = ["id", "name", "scheduled", "venue", "league", "fights"]
-
+        KEYS_SCHED = %w[id name scheduled venue league fights].freeze
       end
     end
   end

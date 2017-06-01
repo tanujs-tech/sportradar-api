@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 module Sportradar
   module Api
     class Football::StatPack::Penalties < Football::StatPack
       attr_accessor :penalties, :yards
 
-      alias :count :penalties
+      alias count penalties
 
       def set_stats
         @response  = (response.dig(1) || {}) if response.is_a? Array
@@ -15,7 +17,6 @@ module Sportradar
         "#{count}-#{yards}"
       end
     end
-
   end
 end
 

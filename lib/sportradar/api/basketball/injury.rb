@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Sportradar
   module Api
     module Basketball
@@ -9,7 +11,7 @@ module Sportradar
           update(data, **opts)
         end
 
-        def update(data, **opts)
+        def update(data, **_opts)
           @id           = data.last&.dig('id')
           @comment      = data.last&.dig('comment')
           @descripton   = data.last&.dig('desc')
@@ -24,17 +26,16 @@ module Sportradar
 
         private def sample_data
           {
-            "injury" => {
-              "id"         => "069a9d3f-036e-4dab-9b49-d2e75082230e",
-              "comment"    => "Paul will have surgery to repair torn ligaments in his left thumb and is expected to be out for six-to-eight weeks to recover, according to a report from ESPN.com.",
-              "desc"       => "Thumb",
-              "status"     => "Out",
-              "start_date" => "2017-01-17",
-              "update_date"=> "2017-01-17"
+            'injury' => {
+              'id'         => '069a9d3f-036e-4dab-9b49-d2e75082230e',
+              'comment'    => 'Paul will have surgery to repair torn ligaments in his left thumb and is expected to be out for six-to-eight weeks to recover, according to a report from ESPN.com.',
+              'desc'       => 'Thumb',
+              'status'     => 'Out',
+              'start_date' => '2017-01-17',
+              'update_date' => '2017-01-17'
             }
           }
         end
-
       end
     end
   end

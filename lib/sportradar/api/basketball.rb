@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'basketball/season'
 require_relative 'basketball/game'
 require_relative 'basketball/team'

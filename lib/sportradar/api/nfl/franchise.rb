@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Sportradar
   module Api
     class Nfl::Franchise < Data
@@ -5,10 +7,9 @@ module Sportradar
 
       def initialize(data)
         @response = data
-        @name = data["name"]
-        @alias = data["alias"]
+        @name = data['name']
+        @alias = data['alias']
       end
-
     end
   end
 end

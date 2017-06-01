@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Sportradar
   module Api
     module Basketball
@@ -7,16 +9,16 @@ module Sportradar
 
           def initialize(data, **opts)
             # @response = data
-            @api      = opts[:api]
+            @api = opts[:api]
 
-            @id    = data["id"]
-            @name  = data["name"]
-            @alias = data["alias"]
+            @id    = data['id']
+            @name  = data['name']
+            @alias = data['alias']
             update(data, **opts)
           end
 
-          def update(data, **opts)
-            @conferences_hash = create_data({}, data["conferences"], klass: Conference, division: self, api: @api) if data["conferences"]
+          def update(data, **_opts)
+            @conferences_hash = create_data({}, data['conferences'], klass: Conference, division: self, api: @api) if data['conferences']
           end
 
           def conferences
@@ -34,7 +36,6 @@ module Sportradar
           def teams
             conferences.flat_map(&:teams)
           end
-
         end
       end
     end

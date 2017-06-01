@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Sportradar
   module Api
     class Ncaafb
@@ -36,7 +38,6 @@ module Sportradar
           @plays ||= parse_into_array_with_options(selector: response['play'], klass: Sportradar::Api::Ncaafb::Play, api: @api, drive: self)
         end
 
-
         def self.end_reason_possibilities
           [
             'UNKNOWN',
@@ -63,9 +64,10 @@ module Sportradar
             'Onside Kick',
             'Kickoff, No Play',
             'End of Half',
-            'End of Game',
+            'End of Game'
           ]
         end
+
         def self.normalized_end_reason
           case end_reason
           when 'Touchdown'
@@ -82,7 +84,6 @@ module Sportradar
             'Other'
           end
         end
-
       end
     end
   end

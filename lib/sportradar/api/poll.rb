@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Sportradar
   module Api
     class Rank
@@ -11,13 +13,11 @@ module Sportradar
         @prev_rank = data['prev_rank']
         @points    = data['points'] || data['votes']
         @fp_votes  = data['fp_votes'].to_i
-        if data['rpi']
-          @rpi = data
-        end
+        @rpi = data if data['rpi']
       end
     end
     class Poll
-      def initialize(data)        
+      def initialize(data)
         @response = data
 
         @id       = data.dig('poll', 'id')
@@ -29,6 +29,7 @@ module Sportradar
 
         update(data)
       end
+
       def update(data)
         @ranked = data['rankings'].map { |h| Rank.new(h) }
         if @alias == 'AP' || @alias == 'US'

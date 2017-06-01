@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Sportradar
   module Api
     class Ncaafb
@@ -19,20 +21,16 @@ module Sportradar
           @down         = response['down']         # "1",
           @yfd          = response['yfd']          # "10",
           @summary      = response['summary']      # "kicks 13 yards from HAW 35 to the HAW 48, downed by 28-P.Laird to HAW 48 for no gain (28-C.Hayes).",
-          @links        = structure_links(response['links'])        # {"link"=>{"rel"=>"summary", "href"=>"/2016/REG/1/HAW/CAL/plays/4ddaf72b-c959-40c1-8bbb-0cd7ee6a32d9.xml", "type"=>"application/xml"}}}
+          @links        = structure_links(response['links']) # {"link"=>{"rel"=>"summary", "href"=>"/2016/REG/1/HAW/CAL/plays/4ddaf72b-c959-40c1-8bbb-0cd7ee6a32d9.xml", "type"=>"application/xml"}}}
           @participants = response['participants'] # {"player"=>[{"id"=>"5062ed5a-c920-4350-8be4-e32ac7b0b27b", "name"=>"Patrick Laird", "jersey"=>"28", "position"=>"RB", "team"=>"CAL"}, {"id"=>"0b0548c8-456f-4d6a-b3d1-f4f386b952e7", "name"=>"Cameron Hayes", "jersey"=>"28", "position"=>"DB", "team"=>"HAW"}]},
-
         end
 
         def parse_player
           # TODO: Currently there is an issue where we are only mapping one player_id to a play, but there are plays with multiple players involved.
           play_stats = @statistics.penalty || @statistics.rush || @statistics.return || @statistics.receive
-          if play_stats.is_a?(Array)
-            play_stats = play_stats.first
-          end
+          play_stats = play_stats.first if play_stats.is_a?(Array)
           @player_id = play_stats.dig('player', 'id') if play_stats
         end
-
       end
     end
   end

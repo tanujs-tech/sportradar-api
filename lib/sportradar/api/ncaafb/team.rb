@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Sportradar
   module Api
     class Ncaafb
@@ -16,9 +18,11 @@ module Sportradar
             update(response)
           end
         end
+
         def full_name
-          (market || name) ? [market, name].join(' ') : id
+          market || name ? [market, name].join(' ') : id
         end
+
         def update(data)
           @name     = data['name']                  if data['name']
           @market   = data['market']                if data['market']
@@ -28,7 +32,7 @@ module Sportradar
         def players
           @players ||= get_roster
         end
-        alias :roster :players
+        alias roster players
         def parse_players(data)
           @players = parse_into_array_with_options(selector: data, klass: Sportradar::Api::Ncaafb::Player, api: api, team: self)
         end
@@ -39,17 +43,16 @@ module Sportradar
         end
 
         def path_base
-          "teams/#{ id }"
-        end
-        def path_roster
-          "#{ path_base }/roster"
+          "teams/#{id}"
         end
 
+        def path_roster
+          "#{path_base}/roster"
+        end
 
         def api
           @api || Sportradar::Api::Ncaafb.new
         end
-
       end
     end
   end

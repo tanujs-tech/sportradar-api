@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Sportradar
   module Api
     module Basketball
@@ -22,6 +24,7 @@ module Sportradar
               end
             end
           end
+
           def self.all
             @all_hash.values
           end
@@ -35,9 +38,8 @@ module Sportradar
           end
 
           def good_guys?
-            id == "9b166a3f-e64b-4825-bb6b-92c6f0418263"
+            id == '9b166a3f-e64b-4825-bb6b-92c6f0418263'
           end
-
         end
       end
     end

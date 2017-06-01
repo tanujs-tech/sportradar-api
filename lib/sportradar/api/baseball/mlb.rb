@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Sportradar
   module Api
     module Baseball
@@ -24,12 +26,15 @@ module Sportradar
         def default_year
           Date.today.year
         end
+
         def default_date
           Date.today
         end
+
         def default_season
           'reg'
         end
+
         def default_access_level
           if (ENV['SPORTRADAR_ENV'] || ENV['SPORTRADAR_ENV_MLB'] || ENV['RACK_ENV'] || ENV['RAILS_ENV']) == 'production'
             'p'
@@ -39,14 +44,14 @@ module Sportradar
         end
 
         def league_hierarchy
-          response = get request_url("league/hierarchy")
+          response = get request_url('league/hierarchy')
           if response.success?
             Sportradar::Api::Baseball::Mlb::Hierarchy.new(response.to_h, api: self)
           else
             response
           end
         end
-        alias :hierarchy :league_hierarchy
+        alias hierarchy league_hierarchy
 
         def content_format
           'json'
@@ -75,9 +80,8 @@ module Sportradar
         end
 
         def allowed_seasons
-          ["pre", "reg", "pst"]
+          %w[pre reg pst]
         end
-
       end
     end
   end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Sportradar
   module Api
     module Baseball
@@ -10,7 +12,7 @@ module Sportradar
             # @api          = opts[:api]
             # @half_inning  = opts[:half_inning]
             @event          = opts[:event]
-            @id             = data["id"]
+            @id             = data['id']
             @type           = data['type']
             @first_name     = data['first_name'] if data['first_name']
             @last_name      = data['last_name'] if data['last_name']
@@ -27,7 +29,6 @@ module Sportradar
           def data_key
             'warming_up'
           end
-
         end
       end
     end

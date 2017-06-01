@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Sportradar
   module Api
     module Baseball
@@ -9,7 +11,7 @@ module Sportradar
           @api      = opts[:api]
           @game     = opts[:game]
 
-          @id       = data["id"]
+          @id       = data['id']
           @number   = data['number']
           @sequence = data['sequence']
 
@@ -19,11 +21,13 @@ module Sportradar
 
           update(data)
         end
-        def update(data, **opts)
+
+        def update(data, **_opts)
           # update scoring
           halfs = data['halfs'].each { |inning| inning['id'] = "#{data['id']}-#{inning['half']}" }
           create_data(@half_innings_hash, halfs, klass: HalfInning, api: @api, inning: self)
         end
+
         def parse_scoring(data)
           @scoring = data.each_with_object({}) { |(_, data), hash| hash[data['id']] = data['runs'].to_s } # from PBP
         end
@@ -35,7 +39,6 @@ module Sportradar
         def events
           half_innings.flat_map(&:events)
         end
-
       end
     end
   end

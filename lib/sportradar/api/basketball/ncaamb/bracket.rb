@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Sportradar
   module Api
     module Basketball
@@ -17,7 +19,7 @@ module Sportradar
             update(data)
           end
 
-          def update(data, **opts)
+          def update(data, **_opts)
             @response = data
 
             @name     = data['name']                  if data['name']
@@ -36,7 +38,6 @@ module Sportradar
           # def update_games(data)
           #   create_data(@games_hash, data, klass: Game, api: @api, season: self)
           # end
-
         end
       end
     end

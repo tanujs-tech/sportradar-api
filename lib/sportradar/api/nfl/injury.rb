@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Sportradar
   module Api
     class Nfl::Injury < Data
@@ -5,12 +7,11 @@ module Sportradar
 
       def initialize(data)
         @response = data
-        @status = data["status"]
-        @status_date = data["status_date"]
-        @practice = OpenStruct.new data["practice"] if data['practice']
-        @primary = data["primary"]
+        @status = data['status']
+        @status_date = data['status_date']
+        @practice = OpenStruct.new data['practice'] if data['practice']
+        @primary = data['primary']
       end
-
     end
   end
 end

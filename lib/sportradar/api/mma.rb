@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Sportradar
   module Api
     class Mma < Request
@@ -10,7 +12,7 @@ module Sportradar
       end
 
       def schedule
-        response = get request_url("schedule")
+        response = get request_url('schedule')
         if response.success? && response['schedule']
           Sportradar::Api::Mma::Schedule.new(response['schedule'], api: self)
         else
@@ -19,7 +21,7 @@ module Sportradar
       end
 
       def participants
-        response = get request_url("profiles")
+        response = get request_url('profiles')
         if response.success? && response['profile']
           Sportradar::Api::Mma::Roster.new(response['profile'], api: self)
         else
@@ -27,19 +29,20 @@ module Sportradar
         end
       end
 
-      def statistics(event_id = "8f85ecc5-0d4d-470b-b357-075cc7e7bedd")
-        event_hash = {"id" => event_id } # => UFC 205 - McGregor/Alvarez
-        event = Event.new({ 'id' => event_id })
+      def statistics(event_id = '8f85ecc5-0d4d-470b-b357-075cc7e7bedd')
+        event_hash = { 'id' => event_id } # => UFC 205 - McGregor/Alvarez
+        event = Event.new('id' => event_id)
         event.get_stats
       end
-      def generate_simulation_event(event_id = "8f85ecc5-0d4d-470b-b357-075cc7e7bedd")
-        event = Event.new({ 'id' => event_id })
+
+      def generate_simulation_event(event_id = '8f85ecc5-0d4d-470b-b357-075cc7e7bedd')
+        event = Event.new('id' => event_id)
         i = 0
         base_path = "simulations/mma/#{event_id}"
         FileUtils.mkdir_p(base_path)
         loop do
           t = Time.now
-          print "#{t}: Data pull #{i+=1}\r"
+          print "#{t}: Data pull #{i += 1}\r"
           res = event.get_stats.body
           File.write("#{base_path}/#{t.to_i}.xml", res)
           wait = (t.to_i + 60 - Time.now.to_i)
@@ -54,7 +57,6 @@ module Sportradar
       # def roster(team_id, year = Date.today.year, season = "reg")
       #   Team.new(team_id).tap { |team| team.roster }
       # end
-
 
       # def weekly_depth_charts(week = 1, year = Date.today.year, season = "reg" )
       #   response = get request_url("seasontd/#{ week_path(year, season, week) }/depth_charts")
@@ -178,7 +180,6 @@ module Sportradar
       def allowed_access_levels
         %w[p t]
       end
-
     end
   end
 end

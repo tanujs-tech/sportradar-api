@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Sportradar
   module Api
     module Basketball
@@ -39,9 +41,9 @@ module Sportradar
           # @away     = data['away'] == 'true'        if data['away']
           # @scoring  = data.dig('scoring', 'quarter') if data.dig('scoring', 'quarter')
 
-          parse_records(data)                                          if data['records']
+          parse_records(data) if data['records']
           # binding.pry if data['players']
-          parse_players(data.dig('players'), opts[:game])   if data.dig('players')
+          parse_players(data.dig('players'), opts[:game]) if data.dig('players')
           # parse_stats(data['statistics'])                             if data['statistics']
           if opts[:game]
             add_game(opts[:game])
@@ -49,6 +51,7 @@ module Sportradar
             opts[:game].update_stats(self, data['statistics'])  if data['statistics']
           end
         end
+
         def handle_names(data)
           # need to do some more work here
           @name = data['name'] if data['name']
@@ -67,6 +70,7 @@ module Sportradar
         def games
           @games_hash.values
         end
+
         def add_game(game)
           @games_hash[game.id] = game.id if game
         end
@@ -79,10 +83,11 @@ module Sportradar
           get_roster if @players_hash.empty?
           @players_hash.values
         end
-        alias :roster :players
+        alias roster players
         def parse_players(data, game)
           create_data(@players_hash, data, klass: player_class, api: api, team: self, game: game)
         end
+
         def update_player_stats(player, stats, game = nil)
           game ? game.update_player_stats(player, stats) : @player_stats.merge!(player.id => stats.merge!(player: player))
         end
@@ -91,6 +96,7 @@ module Sportradar
           data = api.get_data(path_roster)
           ingest_roster(data)
         end
+
         def ingest_roster(data)
           update(data)
           data
@@ -100,6 +106,7 @@ module Sportradar
           data = api.get_data(path_season_stats)
           ingest_season_stats(data)
         end
+
         def ingest_season_stats(data)
           parse_season_stats(data)
         end
@@ -118,18 +125,20 @@ module Sportradar
         end
 
         def path_base
-          "teams/#{ id }"
+          "teams/#{id}"
         end
+
         def path_base_stats(season_year = api.default_year, default_season = api.default_season)
           "seasontd/#{season_year}/#{default_season}/teams/#{id}"
         end
+
         def path_roster
-          "#{ path_base }/profile"
-        end
-        def path_season_stats
-          "#{ path_base_stats }/statistics"
+          "#{path_base}/profile"
         end
 
+        def path_season_stats
+          "#{path_base_stats}/statistics"
+        end
       end
     end
   end

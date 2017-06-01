@@ -1,7 +1,8 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class Sportradar::Api::ContentTest < Minitest::Test
-
   def test_it_accepts_a_valid_sport
     good = Sportradar::Api::Content.new('nfl')
     assert_kind_of Sportradar::Api::Content, good
@@ -19,7 +20,7 @@ class Sportradar::Api::ContentTest < Minitest::Test
   end
 
   def test_it_makes_a_good_news_request
-    VCR.use_cassette("tests good news request") do
+    VCR.use_cassette('tests good news request') do
       request = Sportradar::Api::Content.new('nfl', 't').news(good_date)
       refute_kind_of Sportradar::Api::Content::ArticleList, request
       assert_kind_of Sportradar::Api::Error, request # The commented above will fail until I have a good api key
@@ -33,7 +34,7 @@ class Sportradar::Api::ContentTest < Minitest::Test
   end
 
   def test_it_makes_a_good_analysis_request
-    VCR.use_cassette("tests good analysis request") do
+    VCR.use_cassette('tests good analysis request') do
       request = Sportradar::Api::Content.new('nfl', 't').analysis(good_date)
       refute_kind_of Sportradar::Api::Content::ArticleList, request
       assert_kind_of Sportradar::Api::Error, request # The commented above will fail until I have a good api key
@@ -45,5 +46,4 @@ class Sportradar::Api::ContentTest < Minitest::Test
       Sportradar::Api::Content.new('nfl', 't').analysis(good_date, content_type: 'bad')
     end
   end
-
 end

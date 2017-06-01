@@ -1,26 +1,29 @@
+# frozen_string_literal: true
+
 module Sportradar
   module Api
     module Baseball
       class Runner < Data
         attr_accessor :response, :id, :starting_base, :ending_base, :outcome_id, :out, :description, :fielders, :outcome
 
-        def initialize(data, **opts)
+        def initialize(data, **_opts)
           @response = data
           # @game     = opts[:game]
 
           update(data)
         end
-        def update(data, **opts)
-          @id             = data["id"]
-          @starting_base  = data["starting_base"]
-          @ending_base    = data["ending_base"]
-          @outcome_id     = data["outcome_id"]
+
+        def update(data, **_opts)
+          @id             = data['id']
+          @starting_base  = data['starting_base']
+          @ending_base    = data['ending_base']
+          @outcome_id     = data['outcome_id']
           @outcome        = runner_outcome(@outcome_id)
-          @out            = data["out"]
-          @last_name      = data["last_name"]
-          @first_name     = data["first_name"]
-          @preferred_name = data["preferred_name"]
-          @jersey_number  = data["jersey_number"]
+          @out            = data['out']
+          @last_name      = data['last_name']
+          @first_name     = data['first_name']
+          @preferred_name = data['preferred_name']
+          @jersey_number  = data['jersey_number']
           @description    = data['description']
           @fielders       = data['fielders'].map { |hash| Fielder.new(hash) } if data['fielders']
         end
@@ -28,6 +31,7 @@ module Sportradar
         def runner_outcome(code)
           runner_outcomes[code]
         end
+
         def runner_outcomes
           @runner_outcomes ||= {
             'CK'     => 'Checked',
@@ -68,10 +72,9 @@ module Sportradar
             'RI'     => 'Runner Interference',
             'OOA'    => 'Out on Appeal',
             'OBP'    => 'Out of Base Path',
-            'HBB'    => 'Hit by Batted Ball',
+            'HBB'    => 'Hit by Batted Ball'
           }
         end
-
       end
     end
   end

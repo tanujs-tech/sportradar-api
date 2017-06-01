@@ -1,7 +1,8 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class Sportradar::Api::Basketball::Nba::HierarchyTest < Minitest::Test
-
   def setup
     sr = Sportradar::Api::Basketball::Nba.new
     VCR.use_cassette("nba/#{sr.content_format}/league/hierarchy") do
@@ -10,7 +11,7 @@ class Sportradar::Api::Basketball::Nba::HierarchyTest < Minitest::Test
   end
 
   def test_it_initializes_an_nba_hierarchy
-    assert [:name, :alias].all? { |att| @hierarchy.send(att) }
+    assert %i[name alias].all? { |att| @hierarchy.send(att) }
     assert_instance_of Sportradar::Api::Basketball::Nba::Hierarchy, @hierarchy
   end
 
@@ -35,7 +36,6 @@ class Sportradar::Api::Basketball::Nba::HierarchyTest < Minitest::Test
 
   def test_teams_have_required_attributes
     attributes = %i[id name alias market full_name]
-    assert @hierarchy.teams.all? { |team| attributes.all? { |att| team.send(att)} }
+    assert @hierarchy.teams.all? { |team| attributes.all? { |att| team.send(att) } }
   end
-
 end

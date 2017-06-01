@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Sportradar
   module Api
     class Mma
@@ -14,6 +16,7 @@ module Sportradar
             @all_hash[data['id']] = super
           end
         end
+
         def self.all
           @all_hash.values
         end
@@ -24,7 +27,7 @@ module Sportradar
           @roster   = opts[:roster]
           @fights_hash = {}
 
-          @id       = data['id']
+          @id = data['id']
 
           update(data)
         end
@@ -32,12 +35,12 @@ module Sportradar
         def fights
           @fights_hash.values
         end
+
         def add_fight(fight)
           @fights_hash[fight.id] = fight if fight
         end
 
-
-        def update(data, **opts)
+        def update(data, **_opts)
           @first_name = data['first_name'] if data['first_name'] # "Sai",
           @last_name  = data['last_name']  if data['last_name']  # "The Boss",
 
@@ -47,7 +50,6 @@ module Sportradar
         def api
           @api ||= Sportradar::Api::Mma.new
         end
-
       end
     end
   end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Sportradar
   module Api
     class Mma
@@ -21,16 +23,18 @@ module Sportradar
           @fighters_hash ||= update_fighters(response)
           @fighters_hash.values
         end
+
         def referees
           @referees_hash ||= update_referees(response)
           @referees_hash.values
         end
+
         def judges
           @judges_hash ||= update_judges(response)
           @judges_hash.values
         end
 
-        def update(data)
+        def update(_data)
           # update_fighters(data)
           # update_referees(data)
           # update_judges(data)
@@ -38,19 +42,21 @@ module Sportradar
           self
         end
 
-        def update_fighters(data)
+        def update_fighters(_data)
           create_data(@fighters_hash, response.dig('fighters', 'fighter'), klass: Fighter, api: api, roster: self)
         end
-        def update_referees(data)
+
+        def update_referees(_data)
           create_data(@referees_hash, response.dig('referees', 'referee'), klass: Referee, api: api, roster: self)
         end
-        def update_judges(data)
+
+        def update_judges(_data)
           create_data(@judges_hash, response.dig('judges', 'judge'), klass: Judge, api: api, roster: self)
         end
+
         def api
           @api ||= Sportradar::Api::Mma.new
         end
-
       end
     end
   end

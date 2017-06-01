@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Sportradar
   module Api
     class Nfl::Venue < Data
@@ -5,18 +7,17 @@ module Sportradar
 
       def initialize(data)
         @response = data
-        @id = data["id"]
-        @name = data["name"]
-        @city = data["city"]
-        @state = data["state"]
-        @country = data["country"]
-        @zip = data["zip"]
-        @address = data["address"]
-        @capacity = data["capacity"]
-        @surface = data["surface"]
-        @roof_type = data["roof_type"]
+        @id = data['id']
+        @name = data['name']
+        @city = data['city']
+        @state = data['state']
+        @country = data['country']
+        @zip = data['zip']
+        @address = data['address']
+        @capacity = data['capacity']
+        @surface = data['surface']
+        @roof_type = data['roof_type']
       end
-
     end
   end
 end

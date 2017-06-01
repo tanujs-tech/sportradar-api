@@ -1,7 +1,8 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class Sportradar::Api::Basketball::Ncaamb::StandingsTest < Minitest::Test
-
   def setup
     sr = Sportradar::Api::Basketball::Ncaamb.new
     VCR.use_cassette("ncaamb/#{sr.content_format}/league/standings") do
@@ -12,5 +13,4 @@ class Sportradar::Api::Basketball::Ncaamb::StandingsTest < Minitest::Test
   def test_it_initializes_an_ncaamb_division
     assert_instance_of Sportradar::Api::Basketball::Ncaamb::Division, @standings
   end
-
 end

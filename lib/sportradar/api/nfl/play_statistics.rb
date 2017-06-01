@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Sportradar
   module Api
     class Nfl::PlayStatistics < Data
@@ -11,7 +13,7 @@ module Sportradar
         @receive         = parse_into_array(selector: data['receive'], klass: Nfl::PlayReceiveStatistics) if data['receive']
         @punt            = parse_into_array(selector: data['punt'], klass: Nfl::PlayPuntStatistics) if data['punt']
         @penalty         = parse_into_array(selector: data['penalty'], klass: Nfl::PlayPenaltyStatistics) if data['penalty']
-        @pass		         = parse_into_array(selector: data['pass'], klass: Nfl::PlayPassingStatistics) if data['pass']
+        @pass = parse_into_array(selector: data['pass'], klass: Nfl::PlayPassingStatistics) if data['pass']
         @first_down      = parse_into_array(selector: data['first_down'], klass: Nfl::PlayFirstDownStatistics) if data['first_down']
         @field_goal      = parse_into_array(selector: data['field_goal'], klass: Nfl::PlayFieldGoalStatistics) if data['field_goal']
         @extra_point     = parse_into_array(selector: data['extra_point'], klass: Nfl::PlayExtraPointStatistics) if data['extra_point']
@@ -204,7 +206,6 @@ module Sportradar
         @nullified.to_s == 'true'
       end
     end
-    
 
     class Nfl::PlayKickStatistics < Data
       attr_accessor :attempt, :yards, :gross_yards, :touchback, :team, :player, :endzone, :inside_20, :nullified

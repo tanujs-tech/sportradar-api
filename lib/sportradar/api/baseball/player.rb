@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Sportradar
   module Api
     module Baseball
@@ -9,7 +11,7 @@ module Sportradar
           @api      = opts[:api]
           @team     = opts[:team]
 
-          @id = data["id"]
+          @id = data['id']
 
           update(data, **opts)
         end
@@ -17,9 +19,11 @@ module Sportradar
         def name # to match api for NFL::Player
           full_name
         end
+
         def display_name
           full_name || "#{@preferred_name || @first_name} #{@last_name}"
         end
+
         def jersey
           @jersey_number
         end
@@ -31,7 +35,7 @@ module Sportradar
         def update(data, **opts)
           @depth            = data['depth']             if data['depth']
           @experience       = data['experience']        if data['experience']
-          @birth_place      = data['birth_place'].gsub(',,', ', ')       if data['birth_place']
+          @birth_place      = data['birth_place'].gsub(',,', ', ') if data['birth_place']
           @college          = data['college']           if data['college']
 
           # from team roster
@@ -57,11 +61,10 @@ module Sportradar
           @updated          = data['updated']           if data['updated']
           @active           = data['active']            if data['active']
 
-
           update_injuries(data)
           update_draft(data)
 
-          @team.update_player_stats(self, data['statistics'], opts[:game])  if data['statistics']
+          @team.update_player_stats(self, data['statistics'], opts[:game]) if data['statistics']
           if stats = data['statistics']
             @fielding = stats.dig('fielding', 'overall')
             @pitching = stats.dig('pitching', 'overall')
@@ -82,28 +85,28 @@ module Sportradar
           if birth_date.present?
             now = Time.now.utc.to_date
             dob = birth_date.to_date
-            now.year - dob.year - ((now.month > dob.month || (now.month == dob.month && now.day >= dob.day)) ? 0 : 1)
+            now.year - dob.year - (now.month > dob.month || (now.month == dob.month && now.day >= dob.day) ? 0 : 1)
           end
         end
 
         def update_draft(data)
-          @draft = data['draft'] if data['draft']   # {"team_id"=>"583ec825-fb46-11e1-82cb-f4ce4684ea4c", "year"=>"2012", "round"=>"1", "pick"=>"30"},
+          @draft = data['draft'] if data['draft'] # {"team_id"=>"583ec825-fb46-11e1-82cb-f4ce4684ea4c", "year"=>"2012", "round"=>"1", "pick"=>"30"},
         end
+
         def update_injuries(data)
           # @injury = Injury.new(data['injuries']) if data['injuries']
-               # {"injury"=>
-               #   {"id"=>"06423591-3fc1-4d2b-8c60-a3f30d735345",
-               #    "comment"=>"Ezeli suffered a setback in his recovery from a procedure on his knee and there is no timetable for his return, according to Jason Quick of csnnw.com.",
-               #    "desc"=>"Knee",
-               #    "status"=>"Out",
-               #    "start_date"=>"2016-10-25",
-               #    "update_date"=>"2016-11-09"}}}
+          # {"injury"=>
+          #   {"id"=>"06423591-3fc1-4d2b-8c60-a3f30d735345",
+          #    "comment"=>"Ezeli suffered a setback in his recovery from a procedure on his knee and there is no timetable for his return, according to Jason Quick of csnnw.com.",
+          #    "desc"=>"Knee",
+          #    "status"=>"Out",
+          #    "start_date"=>"2016-10-25",
+          #    "update_date"=>"2016-11-09"}}}
         end
 
         def api
           @api || Sportradar::Api::Baseball::Mlb.new
         end
-
       end
     end
   end

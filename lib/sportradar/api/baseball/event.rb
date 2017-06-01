@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Sportradar
   module Api
     module Baseball
@@ -30,14 +32,14 @@ module Sportradar
         def self.subclass(event_type)
           subclasses[event_type]
         end
+
         def self.subclasses
           @subclasses ||= {
             'at_bat'      => AtBat,
             'lineup'      => Lineup,
-            'warming_up'  => WarmingUp,
+            'warming_up'  => WarmingUp
           }.freeze
         end
-
       end
     end
   end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Sportradar
   module Api
     module Basketball
@@ -17,7 +19,7 @@ module Sportradar
             update(data, **opts)
           end
 
-          def update(data, **opts)
+          def update(data, **_opts)
             @response = data
 
             @name     = data['name']            if data['name']
@@ -30,7 +32,6 @@ module Sportradar
           def games
             @games_hash.values
           end
-
 
           def update_games(data)
             create_data(@games_hash, data, klass: Game, api: @api, season: self)
@@ -45,9 +46,7 @@ module Sportradar
             #   "bracket"=>{"id"=>"fc853dd0-4744-4735-9e16-5953a155dc1c", "name"=>"East Regional", "location"=>"Philadelphia, PA, USA"},
             #   'games' => [],
             # }
-
           end
-
         end
       end
     end

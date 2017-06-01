@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Sportradar
   module Api
     class Mma
@@ -31,12 +33,12 @@ module Sportradar
         def fights
           @fights_hash.values
         end
+
         def add_fight(fight)
           @fights_hash[fight.id] = fight if fight
         end
 
-
-        def update(data, **opts)
+        def update(data, **_opts)
           @first_name   = data['first_name']    if data['first_name']
           @last_name    = data['last_name']     if data['last_name']
           @winner_score = data['winner_score']  if data['winner_score']
@@ -60,7 +62,6 @@ module Sportradar
         def api
           @api ||= Sportradar::Api::Mma.new
         end
-
       end
     end
   end

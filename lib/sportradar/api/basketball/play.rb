@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 module Sportradar
   module Api
     module Basketball
       class Play < Data
         attr_accessor :response, :id, :clock, :event_type, :description, :statistics, :score, :team_id, :player_id, :quarter, :updated, :location, :possession, :on_court
-        alias :type :event_type
+        alias type event_type
         # @all_hash = {}
         # def self.new(data, **opts)
         #   existing = @all_hash[data['id']]
@@ -18,8 +20,8 @@ module Sportradar
         def self.new(data, **opts)
           klass = subclass(data['event_type'])
           klass.new(data, **opts)
-        # rescue => e
-        #   binding.pry
+          # rescue => e
+          #   binding.pry
         end
         # def self.all
         #   @all_hash.values
@@ -28,41 +30,42 @@ module Sportradar
         def self.subclass(event_type)
           subclasses[event_type]
         end
+
         def self.subclasses
           @subclasses ||= {
-            "opentip"               => OpenTip,
-            "twopointmiss"          => TwoPointMiss,
-            "rebound"               => Rebound,
-            "threepointmiss"        => ThreePointMiss,
-            "twopointmade"          => TwoPointMade,
-            "threepointmade"        => ThreePointMade,
-            "turnover"              => Turnover,
-            "personalfoul"          => PersonalFoul,
-            "jumpball"              => Jumpball,
-            "deadball"              => Deadball,
-            "teamtimeout"           => TeamTimeout,
-            "shootingfoul"          => ShootingFoul,
-            "freethrowmade"         => FreeThrowMade,
-            "freethrowmiss"         => FreeThrowMiss,
-            "lineupchange"          => LineupChange,
-            "offensivefoul"         => OffensiveFoul,
-            "endperiod"             => EndPeriod,
-            "openinbound"           => OpenInbound,
-            "officialtimeout"       => OfficialTimeout,
-            "kickball"              => Kickball,
-            "tvtimeout"             => TvTimeout,
-            "clearpathfoul"         => ClearPathFoul,
-            "technicalfoul"         => TechnicalFoul,
-            "review"                => Review,
-            "defensivethreeseconds" => DefensiveThreeSeconds,
-            "flagrantone"           => FlagrantOne,
-            "flagranttwo"           => FlagrantTwo,
-            "delay"                 => Delay,
-            "ejection"              => Ejection,
+            'opentip'               => OpenTip,
+            'twopointmiss'          => TwoPointMiss,
+            'rebound'               => Rebound,
+            'threepointmiss'        => ThreePointMiss,
+            'twopointmade'          => TwoPointMade,
+            'threepointmade'        => ThreePointMade,
+            'turnover'              => Turnover,
+            'personalfoul'          => PersonalFoul,
+            'jumpball'              => Jumpball,
+            'deadball'              => Deadball,
+            'teamtimeout'           => TeamTimeout,
+            'shootingfoul'          => ShootingFoul,
+            'freethrowmade'         => FreeThrowMade,
+            'freethrowmiss'         => FreeThrowMiss,
+            'lineupchange'          => LineupChange,
+            'offensivefoul'         => OffensiveFoul,
+            'endperiod'             => EndPeriod,
+            'openinbound'           => OpenInbound,
+            'officialtimeout'       => OfficialTimeout,
+            'kickball'              => Kickball,
+            'tvtimeout'             => TvTimeout,
+            'clearpathfoul'         => ClearPathFoul,
+            'technicalfoul'         => TechnicalFoul,
+            'review'                => Review,
+            'defensivethreeseconds' => DefensiveThreeSeconds,
+            'flagrantone'           => FlagrantOne,
+            'flagranttwo'           => FlagrantTwo,
+            'delay'                 => Delay,
+            'ejection'              => Ejection,
             # abstract types, used for lookup purposes
-            "foul"                  => Foul,
-            "shotmade"              => ShotMade,
-            "shotmiss"              => ShotMiss,
+            'foul'                  => Foul,
+            'shotmade'              => ShotMade,
+            'shotmiss'              => ShotMiss
           }.freeze
         end
 

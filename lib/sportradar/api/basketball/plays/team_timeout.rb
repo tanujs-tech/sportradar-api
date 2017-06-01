@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Sportradar
   module Api
     module Basketball
@@ -5,6 +7,7 @@ module Sportradar
         def display_type
           'Timeout'
         end
+
         def full?
           description.end_with? '60 second timeout'
         end

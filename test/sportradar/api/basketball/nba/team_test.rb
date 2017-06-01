@@ -1,19 +1,20 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class Sportradar::Api::Basketball::Nba::TeamTest < Minitest::Test
-
   def setup
-    @attrs = {"id"=>"583ec8d4-fb46-11e1-82cb-f4ce4684ea4c",
-              "name"=>"Wizards",
-              "market"=>"Washington",
-              "alias"=>"WAS",
-              "venue"=>{"id"=>"f62d5b49-d646-56e9-ba60-a875a00830f8", "name"=>"Verizon Center", "capacity"=>"20356", "address"=>"601 F St. N.W.", "city"=>"Washington", "state"=>"DC", "zip"=>"20004", "country"=>"USA"}}
+    @attrs = { 'id' => '583ec8d4-fb46-11e1-82cb-f4ce4684ea4c',
+               'name' => 'Wizards',
+               'market' => 'Washington',
+               'alias' => 'WAS',
+               'venue' => { 'id' => 'f62d5b49-d646-56e9-ba60-a875a00830f8', 'name' => 'Verizon Center', 'capacity' => '20356', 'address' => '601 F St. N.W.', 'city' => 'Washington', 'state' => 'DC', 'zip' => '20004', 'country' => 'USA' } }
 
     @team = Sportradar::Api::Basketball::Nba::Team.new(@attrs)
   end
 
   def test_nba_team_initializes
-    assert [:id, :name, :alias, :market, :venue].all? { |e| @team.send(e) }
+    assert %i[id name alias market venue].all? { |e| @team.send(e) }
     assert_instance_of Sportradar::Api::Basketball::Venue, @team.venue
   end
 
@@ -45,5 +46,4 @@ class Sportradar::Api::Basketball::Nba::TeamTest < Minitest::Test
       assert_equal 20, player.averages.size
     end
   end
-
 end

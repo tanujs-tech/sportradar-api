@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Sportradar
   module Api
     class Images::Tag < Data
@@ -5,10 +7,9 @@ module Sportradar
 
       def initialize(data)
         @response = data
-        @type = data["type"]
-        @value = data["value"]
+        @type = data['type']
+        @value = data['value']
       end
-
     end
   end
 end

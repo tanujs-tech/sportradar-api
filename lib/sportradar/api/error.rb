@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Sportradar
   module Api
     class Error
@@ -9,12 +11,12 @@ module Sportradar
       class InvalidSeason < StandardError; end
       class InvalidSport < StandardError; end
       class InvalidType < StandardError; end
-      class Timeout < Timeout::Error ; end
+      class Timeout < Timeout::Error; end
       class NoData < EOFError; end
 
       attr_reader :message, :code, :response
 
-      def initialize( code, message, response)
+      def initialize(code, message, response)
         @code = code
         @message = message
         @response = response
@@ -26,4 +28,3 @@ module Sportradar
     end
   end
 end
-

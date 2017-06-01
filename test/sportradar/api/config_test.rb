@@ -1,9 +1,10 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class Sportradar::Api::ConfigTest < Minitest::Test
-
   def test_it_sets_and_clears_configurations
-    Sportradar::Api.configure  do |config|
+    Sportradar::Api.configure do |config|
       config.api_timeout = 3
       config.use_ssl = false
       config.format = :json
@@ -16,8 +17,5 @@ class Sportradar::Api::ConfigTest < Minitest::Test
     refute_equal Sportradar::Api.config.api_timeout, 3
     refute_equal Sportradar::Api.config.use_ssl, false
     refute_equal Sportradar::Api.config.format, :json
-
   end
-
-
 end

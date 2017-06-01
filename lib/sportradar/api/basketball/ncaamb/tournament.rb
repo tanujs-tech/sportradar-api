@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Sportradar
   module Api
     module Basketball
@@ -18,7 +20,6 @@ module Sportradar
           end
 
           def update(data, **opts)
-
             @season = opts[:season] if opts[:season]
 
             @status   = data['status']                  if data['status']
@@ -51,9 +52,11 @@ module Sportradar
           def brackets
             @brackets_hash.values
           end
+
           def bracket(id)
             @brackets_hash[id]
           end
+
           def update_bracket(id, data)
             if @brackets_hash[id]
               @brackets_hash[id].update(data)
@@ -61,6 +64,7 @@ module Sportradar
               @brackets_hash[id] = Bracket.new(data, tournament: self)
             end
           end
+
           def update_brackets(data)
             create_data(@brackets_hash, data, klass: Round, api: @api, tournament: self)
           end
@@ -73,14 +77,15 @@ module Sportradar
 
           # url paths
           def path_base
-            "tournaments/#{ id }"
+            "tournaments/#{id}"
           end
+
           def path_schedule
-            "#{ path_base }/schedule"
+            "#{path_base}/schedule"
           end
 
           def path_summary
-            "#{ path_base }/summary"
+            "#{path_base}/summary"
           end
 
           # data retrieval
@@ -94,10 +99,12 @@ module Sportradar
             data = api.get_data(path_summary)
             ingest_summary(data)
           end
+
           def queue_summary
             url, headers, options, timeout = api.get_request_info(path_summary)
-            {url: url, headers: headers, params: options, timeout: timeout, callback: method(:ingest_summary)}
+            { url: url, headers: headers, params: options, timeout: timeout, callback: method(:ingest_summary) }
           end
+
           def ingest_summary(data)
             update(data, source: :summary)
             data
@@ -108,10 +115,12 @@ module Sportradar
             data = api.get_data(path_schedule)
             ingest_schedule(data)
           end
+
           def queue_schedule
             url, headers, options, timeout = api.get_request_info(path_schedule)
-            {url: url, headers: headers, params: options, timeout: timeout, callback: method(:ingest_schedule)}
+            { url: url, headers: headers, params: options, timeout: timeout, callback: method(:ingest_schedule) }
           end
+
           def ingest_schedule(data)
             update(data, source: :schedule)
             data
@@ -120,7 +129,6 @@ module Sportradar
           def api
             @api ||= Sportradar::Api::Basketball::Ncaamb.new
           end
-
         end
       end
     end

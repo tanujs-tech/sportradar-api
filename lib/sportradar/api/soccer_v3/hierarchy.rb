@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Sportradar
   module Api
     class SoccerV3::Hierarchy < Data
@@ -5,10 +7,8 @@ module Sportradar
 
       def initialize(data)
         @response = data
-        @categories = parse_into_array(selector: response["category"], klass: Sportradar::Api::SoccerV3::Category)  if response["category"]
+        @categories = parse_into_array(selector: response['category'], klass: Sportradar::Api::SoccerV3::Category) if response['category']
       end
-
     end
   end
 end
-

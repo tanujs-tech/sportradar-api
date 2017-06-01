@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Sportradar
   module Api
     module Baseball
@@ -13,17 +15,19 @@ module Sportradar
             @all_hash[data['id']] = super
           end
         end
+
         def self.all
           @all_hash.values
         end
 
         def initialize(data, **opts)
           @response = data
-          @id       = data["id"]
+          @id       = data['id']
 
           update(data, **opts)
         end
-        def update(data, **opts)
+
+        def update(data, **_opts)
           @name     = data['name']
           @address  = data['address']
           @city     = data['city']
@@ -41,7 +45,7 @@ module Sportradar
           "#{name}, #{city}"
         end
 
-        KEYS_SCHEDULE = ["id", "name", "capacity", "address", "city", "state", "zip", "country"]
+        KEYS_SCHEDULE = %w[id name capacity address city state zip country].freeze
       end
     end
   end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Sportradar
   module Api
     class Images::AssetList < Data
@@ -5,11 +7,10 @@ module Sportradar
 
       def initialize(data)
         @response = data
-        @type = data["type"]
-        @sport = data["sport"]
-        @assets = parse_into_array(selector: response["asset"], klass: Sportradar::Api::Images::Asset)  if response["asset"]
+        @type = data['type']
+        @sport = data['sport']
+        @assets = parse_into_array(selector: response['asset'], klass: Sportradar::Api::Images::Asset) if response['asset']
       end
-
     end
   end
 end

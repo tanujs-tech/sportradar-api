@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 module Sportradar
   module Api
     module Baseball
       class Lineup < Data
         attr_reader :roster, :home, :away, :game
-        def initialize(data, game: nil)
+        def initialize(_data, game: nil)
           @game = game
         end
 
@@ -42,7 +44,7 @@ module Sportradar
           idx = away.index do |h|
             h['order'] == order
           end
-          away[idx] = { 'order' => order}
+          away[idx] = { 'order' => order }
           away[idx].merge!(player)
         end
 
@@ -62,23 +64,23 @@ module Sportradar
             { 'order' => 6 },
             { 'order' => 7 },
             { 'order' => 8 },
-            { 'order' => 9 },
+            { 'order' => 9 }
           ]
         end
 
         def next_batters(team, number_of_upcoming_batters = 3)
           if team == 'home'
-            last_at_bat = game.at_bats.select{|at_bat| at_bat.event.half_inning.half == 'B'}.last
+            last_at_bat = game.at_bats.select { |at_bat| at_bat.event.half_inning.half == 'B' }.last
             if last_at_bat # first inning
-              last_position = @home_team_lineup.detect{|htl| htl['id'] == last_at_bat.hitter_id}&.dig('order')
+              last_position = @home_team_lineup.detect { |htl| htl['id'] == last_at_bat.hitter_id }&.dig('order')
               upcoming = home.rotate(last_position || 0)
             else
               upcoming = home
             end
           elsif team == 'away'
-            last_at_bat = game.at_bats.select{|at_bat| at_bat.event.half_inning.half == 'T'}.last
+            last_at_bat = game.at_bats.select { |at_bat| at_bat.event.half_inning.half == 'T' }.last
             if last_at_bat # first inning
-              last_position = @away_team_lineup.detect{|atl| atl['id'] == last_at_bat.hitter_id}&.dig('order')
+              last_position = @away_team_lineup.detect { |atl| atl['id'] == last_at_bat.hitter_id }&.dig('order')
               upcoming = away.rotate(last_position || 0)
             else
               upcoming = away
@@ -96,20 +98,19 @@ module Sportradar
 
         def initialize_away
           @away = initial_lineup.dup
-          @away_team_lineup.sort_by{|t| t['sequence']}.each do |al|
+          @away_team_lineup.sort_by { |t| t['sequence'] }.each do |al|
             # al.merge!(find_player(al['id']))
             update_away(find_player(al['id']), al['order'])
-          end.sort_by{|al| al['order']}
+          end.sort_by { |al| al['order'] }
         end
 
         def initialize_home
           @home = initial_lineup.dup
-          @home_team_lineup.sort_by{|t| t['sequence']}.each do |hl|
+          @home_team_lineup.sort_by { |t| t['sequence'] }.each do |hl|
             # hl.merge!(find_player(hl['id']))
             update_home(find_player(hl['id']), hl['order'])
-          end.sort_by{|hl| hl['order']}
+          end.sort_by { |hl| hl['order'] }
         end
-
       end
     end
   end

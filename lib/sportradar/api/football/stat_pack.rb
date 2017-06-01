@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Sportradar
   module Api
     module Football
@@ -7,7 +9,7 @@ module Sportradar
         def initialize(data)
           @response = data || {}
           @player = Sportradar::Api::Nfl::Player.new(response) if response['name'] # this isn't used yet, and we need to determine a better solution
-          @players = parse_into_array(selector: response["player"], klass: self.class) if response["player"]
+          @players = parse_into_array(selector: response['player'], klass: self.class) if response['player']
           set_stats
         end
 
@@ -16,7 +18,6 @@ module Sportradar
         def set_stats
           raise NotImplementedError, "Please implement `#{self.class}#set_stats`"
         end
-
       end
     end
   end

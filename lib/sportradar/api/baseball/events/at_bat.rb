@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Sportradar
   module Api
     module Baseball
@@ -10,7 +12,7 @@ module Sportradar
             @api      = opts[:api]
             @event    = opts[:event]
 
-            @id       = data["id"]
+            @id       = data['id']
             @type     = data['type']
 
             @pitches_hash = {}
@@ -34,8 +36,6 @@ module Sportradar
             single? || double? || triple? || homerun?
           end
 
-
-
           def single?
             outcome.to_s.include?('Single')
           end
@@ -57,14 +57,14 @@ module Sportradar
           end
 
           def strikeout?
-            pitches.last&.count.dig('strikes') == 3
+            pitches.last&.count&.dig('strikes') == 3
           end
 
           def runs
-            pitches.flat_map {|pitch| pitch.runners&.select  {|x| x.ending_base == 4 } }.compact
+            pitches.flat_map { |pitch| pitch.runners&.select { |x| x.ending_base == 4 } }.compact
           end
 
-          def update(data, **opts)
+          def update(data, **_opts)
             @description  = data['description'] if data['description']
             @hitter_id    = data['hitter_id']   if data['hitter_id']
             @pitcher_id   = data['pitcher_id']  if data['pitcher_id']
@@ -72,7 +72,7 @@ module Sportradar
             @pitcher_hand   = data['pitcher_hand']  if data['pitcher_hand']
             # this hasn't been checked yet
             # pitch events
-            pitches = data.dig('events').select {|pitch| pitch["type"] == 'pitch' }
+            pitches = data.dig('events').select { |pitch| pitch['type'] == 'pitch' }
             create_data(@pitches_hash, pitches, klass: Pitch, api: @api, at_bat: self)
           end
 
@@ -84,12 +84,10 @@ module Sportradar
             pitches.last&.is_ab_over
           end
 
-
           def pitches
             @pitches_hash.values
           end
         end
-
       end
     end
   end

@@ -1,14 +1,16 @@
+# frozen_string_literal: true
+
 module Sportradar
   module Api
     module Basketball
       class Nba
         class Game < Sportradar::Api::Basketball::Game
-
           # NBA specific
 
           def team_class
             Team
           end
+
           def period_class
             Quarter
           end
@@ -16,13 +18,12 @@ module Sportradar
           def period_name
             'quarter'
           end
-          alias :quarter :period
-          alias :quarters :periods
+          alias quarter period
+          alias quarters periods
 
           def api
             @api || Sportradar::Api::Basketball::Nba.new
           end
-
         end
       end
     end

@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 module Sportradar
   module Api
     module Basketball
       class Nba
         class Series < Basketball::Season
           attr_accessor :response, :id, :status, :title, :round, :start_date
-          alias :name :title
+          alias name title
 
           def initialize(data, **opts)
             @response = data
@@ -17,12 +19,11 @@ module Sportradar
             update(data, **opts)
           end
 
-          def update(data, **opts)
+          def update(data, **_opts)
             @title      = data['title']       if data['title']
             @round      = data['round']       if data['round']
             @status     = data['status']      if data['status']
             @start_date = data['start_date']  if data['start_date']
-
 
             update_participants(data['participants']) if data['participants']
             update_games(data['games'])               if data['games']
@@ -53,19 +54,22 @@ module Sportradar
           def future?
             ['scheduled', 'delayed', 'created', 'time-tbd'].include? status
           end
+
           def started?
-            ['inprogress', 'halftime', 'delayed'].include? status
+            %w[inprogress halftime delayed].include? status
           end
+
           def finished?
-            ['complete', 'closed'].include? status
+            %w[complete closed].include? status
           end
+
           def completed?
             'complete' == status
           end
+
           def closed?
             'closed' == status
           end
-
         end
       end
     end

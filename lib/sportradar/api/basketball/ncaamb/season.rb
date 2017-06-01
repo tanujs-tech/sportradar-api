@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Sportradar
   module Api
     module Basketball
@@ -41,7 +43,6 @@ module Sportradar
           def update_tournaments(data)
             create_data(@tournaments_hash, data, klass: Tournament, api: @api, season: self)
           end
-
         end
       end
     end

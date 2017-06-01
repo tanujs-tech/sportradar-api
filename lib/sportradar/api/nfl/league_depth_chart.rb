@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Sportradar
   module Api
     class Nfl::LeagueDepthChart < Data
@@ -9,7 +11,7 @@ module Sportradar
         depth_chart_data = data['depth_charts']
         @season = Sportradar::Api::Nfl::Season.new data
         # @teams = depth_chart_data["team"].map {|team| Sportradar::Api::Nfl::Team.new team } if depth_chart_data["team"]
-        @charts = depth_chart_data["team"].map {|team| Sportradar::Api::Nfl::TeamDepthChart.new(team, season) } if depth_chart_data["team"]
+        @charts = depth_chart_data['team'].map { |team| Sportradar::Api::Nfl::TeamDepthChart.new(team, season) } if depth_chart_data['team']
       end
 
       # id is preferred search, but we allow for team abbreviation too
@@ -18,9 +20,8 @@ module Sportradar
       end
 
       def each
-        self.charts.each { |chart| yield chart }
+        charts.each { |chart| yield chart }
       end
-
     end
   end
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Sportradar
   module Api
     class SoccerV3::Statistic < Data
@@ -5,10 +7,8 @@ module Sportradar
 
       def initialize(data)
         @response = data
-        @year = data["year"]
-
+        @year = data['year']
       end
-
     end
   end
 end

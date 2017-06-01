@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Sportradar
   module Api
     class Ncaafb < Request
@@ -11,7 +13,7 @@ module Sportradar
 
       def schedule(year = Date.today.year, season = 'reg')
         raise Sportradar::Api::Error::InvalidSeason unless allowed_seasons.include? season
-        response = get request_url("#{ year }/#{ season }/schedule")
+        response = get request_url("#{year}/#{season}/schedule")
         # response = self.class.get 'http://developer.sportradar.us/files/ncaafb_v1_season_schedule_example.xml'
         if response.success? && response['season']
           Sportradar::Api::Ncaafb::Season.new(response['season'], api: self)
@@ -20,8 +22,8 @@ module Sportradar
         end
       end
 
-      def weekly_schedule(week = 1, year = Date.today.year, season = "reg")
-        response = get request_url("#{ week_path(year, season, week) }/schedule")
+      def weekly_schedule(week = 1, year = Date.today.year, season = 'reg')
+        response = get request_url("#{week_path(year, season, week)}/schedule")
         # response = self.class.get 'http://developer.sportradar.us/files/NFL_Official_Weekly_Schedule_Sample.xml'
         if response.success? && response['games']
           Sportradar::Api::Ncaafb::Week.new(response['games'], api: self)
@@ -30,10 +32,9 @@ module Sportradar
         end
       end
 
-      def roster(team_id, year = Date.today.year, season = "reg")
-        Team.new(team_id).tap { |team| team.roster }
+      def roster(team_id, _year = Date.today.year, _season = 'reg')
+        Team.new(team_id).tap(&:roster)
       end
-
 
       # def weekly_depth_charts(week = 1, year = Date.today.year, season = "reg" )
       #   response = get request_url("seasontd/#{ week_path(year, season, week) }/depth_charts")
@@ -60,11 +61,11 @@ module Sportradar
       #   Sportradar::Api::Nfl::Game.new response["game"]  if response.success? && response["game"]
       # end
 
-      def game_statistics(game_data)
+      def game_statistics(_game_data)
         # check_simulation(game_id)
-        base = "#{ year }/#{ ncaafb_season }/#{ ncaafb_season_week }/#{ away_team}/#{ home_team }/statistics"
+        base = "#{year}/#{ncaafb_season}/#{ncaafb_season_week}/#{away_team}/#{home_team}/statistics"
         response = get_data(base)
-        Sportradar::Api::Nfl::Game.new response["game"]  if response.success? && response["game"]
+        Sportradar::Api::Nfl::Game.new response['game'] if response.success? && response['game']
         ## Need to properly implement statistics
       end
 
@@ -132,7 +133,7 @@ module Sportradar
         get request_url(url)
       end
 
-      def get_pbp(*args)
+      def get_pbp(*_args)
         'pbp'
       end
 
@@ -167,7 +168,7 @@ module Sportradar
       end
 
       def allowed_seasons
-        ["pre", "reg", "pst"]
+        %w[pre reg pst]
       end
     end
   end
