@@ -13,15 +13,14 @@ module Sportradar
 
       def initialize(data)
         @response = data
-        tournament_info = data['tournament_info']
-        @tournament = Sportradar::Api::SoccerV3::Tournament.new tournament_info
-        @season = Sportradar::Api::SoccerV3::Season.new tournament_info['season']
+        @tournament = Sportradar::Api::SoccerV3::Tournament.new data[:tournament]
+        @season = Sportradar::Api::SoccerV3::Season.new data[:season]
         @round = OpenStruct.new data['round']
-        @season_coverage_info = OpenStruct.new tournament_info['season_coverage_info'] if tournament_info['season_coverage_info']
-        @coverage_info = OpenStruct.new tournament_info['coverage_info']
+        @season_coverage_info = OpenStruct.new data['season_coverage_info'] if data['season_coverage_info']
+        @coverage_info = OpenStruct.new data['coverage_info']
 
-        groups_details = tournament_info.fetch('groups')&.fetch('group')&.send :[], 0...-1
-        teams = tournament_info.fetch('groups')&.fetch('group')&.last&.fetch('team')
+        groups_details = data.fetch('groups')&.fetch('group')&.send :[], 0...-1
+        teams = data.fetch('groups')&.fetch('group')&.last&.fetch('team')
 
         @groups = OpenStruct.new('groups': parse_into_array(selector: groups_details, klass: Sportradar::Api::SoccerV3::Group),
                                  'teams': parse_into_array(selector: teams, klass: Sportradar::Api::SoccerV3::Team))

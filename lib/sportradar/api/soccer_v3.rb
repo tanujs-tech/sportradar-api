@@ -33,7 +33,7 @@ module Sportradar
       def tournament_info(tournament_id = 'sr:tournament:7')
         response = get request_url("tournaments/#{tournament_id}/info")
         if response.success?
-          Sportradar::Api::SoccerV3::TournamentInfo.new response
+          Sportradar::Api::SoccerV3::TournamentInfo.new indifferent_access(response)[:tournament_info]
         else
           response
         end
