@@ -13,7 +13,8 @@ module Sportradar
                     :year,
                     :type,
                     :season_coverage_info,
-                    :teams
+                    :teams,
+                    :category
 
       def initialize(data)
         @response = data
@@ -28,6 +29,8 @@ module Sportradar
         @year = current_season&.year
 
         @season_coverage_info = OpenStruct.new data['season_coverage_info'] if data['season_coverage_info']
+
+        @category = Sportradar::Api::SoccerV3::Category.new(data[:category]) if data[:category]
       end
     end
   end
