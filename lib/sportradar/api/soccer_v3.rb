@@ -24,7 +24,7 @@ module Sportradar
       def tournaments
         response = get request_url('tournaments')
         if response.success?
-          Sportradar::Api::SoccerV3::Tournaments.new response
+          Sportradar::Api::SoccerV3::Tournaments.new indifferent_access(response)
         else
           response
         end
