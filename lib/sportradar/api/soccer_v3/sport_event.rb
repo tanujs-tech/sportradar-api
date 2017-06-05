@@ -21,7 +21,6 @@ module Sportradar
         @status = data[:status]
 
         @tournament_round = OpenStruct.new data[:tournament_round]
-
         @season = Sportradar::Api::SoccerV3::Season.new data[:season]
 
         @tournament = Sportradar::Api::SoccerV3::Tournament.new data[:tournament]

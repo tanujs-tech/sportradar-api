@@ -22,7 +22,7 @@ module Sportradar
         @name = data['name']
         @sport = OpenStruct.new data['sport']
 
-        @current_season = Sportradar::Api::SoccerV3::Season.new data[:current_season]
+        @current_season = Sportradar::Api::SoccerV3::Season.new data[:current_season] if data[:current_season]
 
         @season_start = current_season&.start_date
         @season_end = current_season&.end_date
