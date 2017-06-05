@@ -9,9 +9,8 @@ module Sportradar
 
       def initialize(data)
         @response = data
-        tournament_schedule = data[:tournament_schedule]
-        @tournament = Sportradar::Api::SoccerV3::Tournament.new tournament_schedule[:tournament]
-        events = tournament_schedule[:sport_events][:sport_event]
+        @tournament = Sportradar::Api::SoccerV3::Tournament.new data[:tournament]
+        events = data[:sport_events][:sport_event]
         @sport_events = parse_into_array(selector: events, klass: Sportradar::Api::SoccerV3::SportEvant)
       end
     end
