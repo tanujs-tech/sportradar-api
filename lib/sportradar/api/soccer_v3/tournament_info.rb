@@ -20,7 +20,8 @@ module Sportradar
         @coverage_info = OpenStruct.new data['coverage_info']
 
         groups_details = data.fetch('groups')&.fetch('group')&.send :[], 0...-1
-        teams = data.fetch('groups')&.fetch('group')&.last&.fetch('team')
+
+        teams = data.fetch('groups')&.fetch('group')&.fetch('team')
 
         @groups = OpenStruct.new('groups': parse_into_array(selector: groups_details, klass: Sportradar::Api::SoccerV3::Group),
                                  'teams': parse_into_array(selector: teams, klass: Sportradar::Api::SoccerV3::Team))

@@ -42,7 +42,7 @@ module Sportradar
       def tournament_schedule(tournament_id = 'sr:tournament:7')
         response = get request_url("tournaments/#{tournament_id}/schedule")
         if response.success?
-          res_hash = ActiveSupport::HashWithIndifferentAccess.new(response['player_profile'])
+          res_hash = indifferent_access(response)[:tournament_schedule]
           Sportradar::Api::SoccerV3::TournamentSchedule.new res_hash
         else
           response
