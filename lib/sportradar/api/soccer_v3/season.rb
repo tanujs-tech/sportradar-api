@@ -17,8 +17,8 @@ module Sportradar
         @response = data
         @id = data['id']
         @name = data['name']
-        @start_date = data['start_date']
-        @end_date = data['end_date']
+        @start_date = data['start_date']&.to_date
+        @end_date = data['end_date']&.to_date
         @year = data['year']
         @tournament_id = data['tournament_id']
         @tournament = Sportradar::Api::SoccerV3::Tournament.new(data[:tournament]) if data[:tournament]
