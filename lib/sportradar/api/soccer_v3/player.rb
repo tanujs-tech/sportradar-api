@@ -5,7 +5,9 @@ module Sportradar
     class SoccerV3::Player < Data
       attr_accessor :response,
                     :id,
-                    :name,
+                    :first_name,
+                    :last_name,
+                    :full_name,
                     :type,
                     :date_of_birth,
                     :nationality,
@@ -15,13 +17,13 @@ module Sportradar
                     :preferred_foot,
                     :team,
                     :roles,
+                    :jersey_number,
                     :statistics
       # :reference_id,
       # :full_first_name,
       # :full_last_name,
       # :position,
       # :started,
-      # :jersey_number,
       # :tactical_position,
       # :tactical_order,
       # :statistics,
@@ -40,10 +42,12 @@ module Sportradar
 
       def initialize(data)
         @response = data
-        player_data = data[:player]
+        player_data = data[:player] || data
 
         @id = player_data['id']
-        @name = player_data[:name]
+        @full_name = player_data[:name]
+        @first_name = first_name
+        @last_name = last_name
         @type = player_data[:type]
         @date_of_birth = player_data[:date_of_birth]
         @nationality = player_data[:nationality]
@@ -53,17 +57,17 @@ module Sportradar
         @preferred_foot = player_data[:preferred_foot]
 
         # @teams = parse_into_array(selector: response['team'], klass: Sportradar::Api::SoccerV3::Team) if response['team']
-        @team = Sportradar::Api::SoccerV3::Team.new(data[:teams][:team])
+        @team = Sportradar::Api::SoccerV3::Team.new(data[:teams][:team]) if response[:team]
 
-        player_roles = data[:roles][:role]
-        @roles = parse_into_array(selector: player_roles, klass: Sportradar::Api::SoccerV3::Role)
+        player_roles = data[:roles][:role] if response[:roles]
+        @roles = parse_into_array(selector: player_roles, klass: Sportradar::Api::SoccerV3::Role) if player_roles
 
         # @reference_id = data['reference_id']
         # @full_first_name = data['full_first_name']
         # @full_last_name = data['full_last_name']
         # @position = data['position'] || primary_team.try(:position)
         # @started = data['started']
-        # @jersey_number = data['jersey_number'] || primary_team.try(:jersey_number)
+        @jersey_number = player_data[:jersey_number] # || primary_team.try(:jersey_number)
         # @tactical_position = data['tactical_position']
         # @tactical_order = data['tactical_order']
         # @last_modified = data['last_modified']
@@ -80,7 +84,7 @@ module Sportradar
         @statistics = OpenStruct.new(
           seasons: parse_into_array(selector: response[:statistics][:seasons][:season], klass: Sportradar::Api::SoccerV3::Season),
           totals: Sportradar::Api::SoccerV3::Statistic.new(response[:statistics][:totals][:statistics])
-        )
+        ) if response[:statistics]
       end
 
       # def name
@@ -91,6 +95,14 @@ module Sportradar
       #   full = [full_first_name, full_last_name].join(' ')
       #   full == ' ' ? name : full
       # end
+
+      def first_name
+        full_name.split(', ')[1]
+      end
+
+      def last_name
+        full_name.split(', ')[0]
+      end
 
       def position_name
         positions = { 'G' => 'Goalie', 'D' => 'Defender', 'M' => 'Midfielder', 'F' => 'Forward', '' => 'N/A' }

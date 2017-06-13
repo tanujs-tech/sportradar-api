@@ -108,15 +108,14 @@ module Sportradar
       #   end
       # end
 
-      # # team_id = "b78b9f61-0697-4347-a1b6-b7685a130eb1"
-      # def team_profile(team_id)
-      #   response = get request_url("teams/#{team_id}/profile")
-      #   if response.success? && response['profile'] && response['profile']['team']
-      #     Sportradar::Api::SoccerV3::Team.new response['profile']['team']
-      #   else
-      #     response
-      #   end
-      # end
+      def team_profile(team_id = 'sr:competitor:48')
+        response = get request_url("teams/#{team_id}/profile")
+        if response.success? && response['team_profile']
+          Sportradar::Api::SoccerV3::Team.new indifferent_access(response)[:team_profile]
+        else
+          response
+        end
+      end
 
       # # player_id = "2aeacd39-3f9c-42af-957e-9df8573973c4"
       # def player_profile(player_id)
