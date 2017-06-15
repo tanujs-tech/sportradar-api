@@ -85,18 +85,13 @@ module Sportradar
       end
      
 
-      def team_profile(team_id = '140a99-5b41-400d-b189-5c098b753b3d')
+      def team_profile(team_id = 'ea140a99-5b41-400d-b189-5c098b753b3d')
         response = get request_url("teams/#{team_id}/profile")
         if response.success?
           response.parsed_response
         else
           response
         end
-      end
-
-      
-      def simulation_match
-        '22653ed5-0b2c-4e30-b10c-c6d51619b52b'
       end
 
       private
