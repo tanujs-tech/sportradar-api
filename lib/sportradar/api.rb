@@ -128,6 +128,8 @@ require 'sportradar/api/content/article'
 require 'sportradar/api/content/reference'
 require 'sportradar/api/odds'
 
+require 'sportradar/api/rugby'
+
 module Sportradar
   module Api
     API_GALLERY = [
