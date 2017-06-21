@@ -86,16 +86,17 @@ module Sportradar
       #   end
       # end
 
-      # # match_id  = "357607e9-87cd-4848-b53e-0485d9c1a3bc"
-      # def match_summary(match_id)
-      #   check_simulation(match_id)
-      #   response = get request_url("matches/#{match_id}/summary")
-      #   if response.success?
-      #     Sportradar::Api::SoccerV3::Summary.new response
-      #   else
-      #     response
-      #   end
-      # end
+      # match_id  = "357607e9-87cd-4848-b53e-0485d9c1a3bc"
+      def match_summary(match_id)
+        # check_simulation(match_id)
+        response = get request_url("matches/#{match_id}/summary")
+        byebug
+        if response.success?
+          Sportradar::Api::SoccerV3::Summary.new indifferent_access(response)[:match_summary]
+        else
+          response
+        end
+      end
 
       # # match_id  = "357607e9-87cd-4848-b53e-0485d9c1a3bc"
       # def match_boxscore(match_id)
@@ -185,7 +186,7 @@ module Sportradar
       end
 
       def allowed_access_levels
-        %w[p t]
+        %w[p t xt]
       end
 
       def allowed_leagues
