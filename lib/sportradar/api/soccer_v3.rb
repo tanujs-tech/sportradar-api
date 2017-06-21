@@ -90,7 +90,6 @@ module Sportradar
       def match_summary(match_id)
         # check_simulation(match_id)
         response = get request_url("matches/#{match_id}/summary")
-        byebug
         if response.success?
           Sportradar::Api::SoccerV3::Summary.new indifferent_access(response)[:match_summary]
         else
