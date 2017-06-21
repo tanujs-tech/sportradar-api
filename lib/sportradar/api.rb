@@ -166,7 +166,7 @@ module Sportradar
     end
 
     def self.api_key(api, access_level = 'trial')
-      ENV.fetch("SPORTRADAR_#{api.to_s.upcase.tr('-', '_')}#{'_PRODUCTION' if access_level == 'production'}", "api_key missing for #{api}")
+      Figaro.env.send("SPORTRADAR_#{api.to_s.upcase.tr('-', '_')}#{'_PRODUCTION' if access_level == 'production'}", "api_key missing for #{api}")
     end
 
     def self.version(api)
