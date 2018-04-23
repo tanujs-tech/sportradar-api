@@ -2,7 +2,7 @@
 
 module Sportradar
   module Api
-    class SoccerV3::SportEvant < Data
+    class SoccerV3::SportEvent < Data
       attr_accessor :response,
                     :id,
                     :scheduled,

@@ -11,7 +11,7 @@ module Sportradar
         @response = data
         @tournament = Sportradar::Api::SoccerV3::Tournament.new data[:tournament]
         events = data[:sport_events][:sport_event]
-        @sport_events = parse_into_array(selector: events, klass: Sportradar::Api::SoccerV3::SportEvant)
+        @sport_events = parse_into_array(selector: events, klass: Sportradar::Api::SoccerV3::SportEvent)
       end
     end
   end
