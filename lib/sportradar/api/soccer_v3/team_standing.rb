@@ -17,8 +17,8 @@ module Sportradar
                     :points
 
       def initialize(data)
-        # @response = data
-        @team = parse_into_array(selector: data['team'], klass: Sportradar::Api::SoccerV3::Team)
+        @response = data
+        @team = parse_into_array(selector: data['team'], klass: Sportradar::Api::SoccerV3::TeamBasic)
         @rank = data['rank']
         @current_outcome = data['current_outcome']
         @played = data['played']

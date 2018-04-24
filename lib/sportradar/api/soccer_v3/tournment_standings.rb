@@ -4,15 +4,16 @@ module Sportradar
   module Api
     class SoccerV3::TournamentStandings < Data
       attr_accessor :response,
-                    # :tournament,
+                    :tournament,
                     :season,
                     :standings
 
       def initialize(data)
-        # @tournament = parse_into_array(selector: data[:tournament], klass: Sportradar::Api::SoccerV3::Tournament)
+        @tournament = parse_into_array(selector: data[:tournament], klass: Sportradar::Api::SoccerV3::Tournament)
         @season = parse_into_array(selector: data[:season], klass: Sportradar::Api::SoccerV3::Season)
-        # @response = data[:standings]
-        total_teams = data[:standings].detect { |a| a[:type] == 'total' } || {}
+        @response = data[:standings]
+        total_teams = @response.detect { |a| a[:type] == 'total' } || {}
+
         # TODO: when needed
         # home = @response.detect { |a| a[:type] == 'home' }
         # away = @response.detect { |a| a[:type] == 'away' }

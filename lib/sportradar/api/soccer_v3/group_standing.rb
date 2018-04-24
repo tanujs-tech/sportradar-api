@@ -8,7 +8,7 @@ module Sportradar
                     :team_standing
 
       def initialize(data)
-        # @response = data
+        @response = data
         @name = data[:name]
         @team_standing = parse_data(data[:team_standing])
       end
