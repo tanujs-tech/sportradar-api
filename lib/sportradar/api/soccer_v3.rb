@@ -198,7 +198,7 @@ module Sportradar
       end
 
       def allowed_leagues
-        %w[eu na sa wc as af other]
+        %w[eu na sa wc as af other intl]
       end
     end
   end
