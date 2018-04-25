@@ -154,7 +154,7 @@ module Sportradar
       #   end
       # end
 
-      def tournment_standings(tournament_id = 'sr:tournament:7')
+      def tournament_standings(tournament_id = 'sr:tournament:7')
         response = get request_url("tournaments/#{tournament_id}/standings")
         if response.success? && response['tournament_standings']
           Sportradar::Api::SoccerV3::TournamentStandings.new indifferent_access(response['tournament_standings'])
