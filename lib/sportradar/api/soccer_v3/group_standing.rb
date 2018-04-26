@@ -18,7 +18,7 @@ module Sportradar
       def parse_data(team_standings)
         team_standings.collect do |team_standing|
           parse_into_array(selector: team_standing, klass: Sportradar::Api::SoccerV3::TeamStanding)
-        end
+        end.flatten
       end
     end
   end
