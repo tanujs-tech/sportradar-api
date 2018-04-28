@@ -21,7 +21,7 @@ module Sportradar
 
         group = data.fetch('groups')&.fetch('group')
 
-        groups_details = group&.send :[], 0...-1
+        groups_details = group&.send :[], 0..-1
 
         teams = if group&.kind_of? Array
                   group&.last&.fetch(:team)
