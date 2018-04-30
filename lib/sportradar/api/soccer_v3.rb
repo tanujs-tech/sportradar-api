@@ -154,6 +154,15 @@ module Sportradar
       #   end
       # end
 
+      def tournament_standings(tournament_id = 'sr:tournament:7')
+        response = get request_url("tournaments/#{tournament_id}/standings")
+        if response.success? && response['tournament_standings']
+          Sportradar::Api::SoccerV3::TournamentStandings.new indifferent_access(response['tournament_standings'])
+        else
+          response
+        end
+      end
+
       def simulation_match
         '22653ed5-0b2c-4e30-b10c-c6d51619b52b'
       end
@@ -189,7 +198,7 @@ module Sportradar
       end
 
       def allowed_leagues
-        %w[eu na sa wc as af other]
+        %w[eu na sa wc as af other intl]
       end
     end
   end
