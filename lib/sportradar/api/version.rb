@@ -2,6 +2,6 @@
 
 module Sportradar
   module Api
-    VERSION = '0.10.55'
+    VERSION = '0.10.56'
   end
 end
