@@ -4,6 +4,7 @@ module Sportradar
   module Api
     class SoccerV3 < Request
       attr_accessor :league, :access_level, :simulation, :locale
+
       def initialize(league = 'na', access_level = 't', locale = :en)
         raise Sportradar::Api::Error::InvalidAccessLevel unless allowed_access_levels.include? access_level
         raise Sportradar::Api::Error::InvalidLeague unless allowed_leagues.include? league
@@ -92,6 +93,16 @@ module Sportradar
         response = get request_url("matches/#{match_id}/summary")
         if response.success?
           Sportradar::Api::SoccerV3::Summary.new indifferent_access(response)[:match_summary]
+        else
+          response
+        end
+      end
+
+      def match_timeline(match_id)
+        # check_simulation(match_id)
+        response = get request_url("matches/#{match_id}/timeline")
+        if response.success?
+          Sportradar::Api::SoccerV3::Summary.new indifferent_access(response)[:match_timeline]
         else
           response
         end
